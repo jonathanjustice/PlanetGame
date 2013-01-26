@@ -175,6 +175,9 @@
 				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
 				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
 			}
+			setAllMatchesTofalse(gemsRing_0);
+			setAllMatchesTofalse(gemsRing_1);
+			setAllMatchesTofalse(gemsRing_2);
 			checkForMatches();
 		}
 		
@@ -186,7 +189,16 @@
 				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
 				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
 			}
+			setAllMatchesTofalse(gemsRing_0);
+			setAllMatchesTofalse(gemsRing_1);
+			setAllMatchesTofalse(gemsRing_2);
 			checkForMatches();
+		}
+		
+		private function setAllMatchesTofalse(ringsArray):void {
+			for (var i:int = 0; i < ringsArray.length; i++ ) {
+				ringsArray[i].setIsMatching(false);
+			}
 		}
 		
 		private function checkForMatches():void {
@@ -195,13 +207,9 @@
 				if (gemsRing_2[i].getGemType() == gemsRing_1[~~(i / 2)].getGemType() ) {
 					if (gemsRing_1[~~(i / 2)].getGemType() == gemsRing_0[~~(i / 4)].getGemType()) {
 						//return true;
-						gemsRing_2[i].alpha = .5;
-						gemsRing_1[~~(i / 2)].alpha = .5;
-						gemsRing_0[~~(i / 4)].alpha = .5;
-					}else {
-						gemsRing_2[i].alpha = 1;
-						gemsRing_1[~~(i / 2)].alpha = 1;
-						gemsRing_0[~~(i / 4)].alpha = 1;
+						gemsRing_2[i].setIsMatching(true);
+						gemsRing_1[~~(i / 2)].setIsMatching(true);
+						gemsRing_0[~~(i / 4)].setIsMatching(true);
 					}
 				}
 			}

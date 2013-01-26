@@ -16,6 +16,7 @@ package utilities.Actors{
 		public var damage:Number=20;
 		private var targetTweenPoint:Point = new Point();
 		private var gemType:String = "";
+		private var isMatching:Boolean=false;
 	
 		public function Gem(){
 			setUp();
@@ -70,6 +71,19 @@ package utilities.Actors{
 		
 		public function getGemType():String {
 			return gemType;
+		}
+		
+		public function setIsMatching(boo:Boolean) {
+			isMatching = boo;
+			highlightMatches();
+		}
+		
+		private function highlightMatches():void {
+			if (isMatching) {
+				this.alpha = 0.5;
+			}else {
+				this.alpha = 1;
+			}
 		}
 		
 		public override function defineProperties():void{
