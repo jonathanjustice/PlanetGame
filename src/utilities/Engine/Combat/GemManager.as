@@ -1,18 +1,11 @@
 ﻿package utilities.Engine.Combat{
 	
-	import com.greensock.plugins.EndVectorPlugin;
-	import utilities.Actors.Gem;
-	import utilities.Engine.DefaultManager;
-	import flash.display.MovieClip;
-	import flash.geom.Point;
-	import utilities.Mathematics.MathFormulas;
-	import utilities.Actors.Enemy;
-	import utilities.Actors.Gem;
-	import utilities.Actors.Bullet;
-	import utilities.Input.KeyInputManager;
-	import utilities.Input.MouseInputManager;
-	import com.greensock.TweenMax
-	import flash.events.KeyboardEvent;
+	import com.greensock.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import utilities.Actors.*;
+	import utilities.Engine.*;
+	import utilities.Mathematics.*;
 	public class GemManager extends utilities.Engine.DefaultManager{
 		
 		
@@ -48,6 +41,11 @@
 		}
 		
 		public function setUpRings():void {
+			
+			var planet:Planet = new Planet();
+			planet.x = originPoint.x;
+			planet.y = originPoint.y;
+			
 			for (var i:int = 0; i < gemRingSize_0; i++) {
 				addGemToRing(gemsRing_0);
 			}
@@ -79,8 +77,8 @@
 				ringNumber = 2;
 			}
 			var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
-			positionOfGem.x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
-			positionOfGem.y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
+			positionOfGem.x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
+			positionOfGem.y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 			trace("positionOfGem", positionOfGem);
 			return positionOfGem;
 		}
@@ -88,8 +86,8 @@
 		private function arrangeMyGems(ringArray:Array, ringNumber:int):void {
 			for (var i:int = 0; i < ringArray.length; i++) {
 				var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
-				ringArray[i].x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
-				ringArray[i].y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
+				ringArray[i].x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
+				ringArray[i].y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 	
 				var gemPoint:Point = new Point();
 				gemPoint.x = ringArray[i].x;
@@ -130,7 +128,7 @@
 						}
 						for (var j:int = 0; j < gemsRing_2.length; j++) {
 							
-							TweenMax.to(gemsRing_2[j], 1, { x:gemsRing_2[j].getTargetTweenPoint().x, y:gemsRing_2[j].getTargetTweenPoint().y, onComplete:incrementCompleted } );
+							TweenMax.to(gemsRing_2[j], 0.5, { x:gemsRing_2[j].getTargetTweenPoint().x, y:gemsRing_2[j].getTargetTweenPoint().y, onComplete:incrementCompleted } );
 							function incrementCompleted():void{
 								completedTweens++;
 								if (completedTweens == gemsRing_2.length) {

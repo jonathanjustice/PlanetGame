@@ -44,7 +44,7 @@ package utilities.Actors{
 			//addActorToGameEngine(utilities.Engine.Game.bulletManager);
 		//	setInitialLocationAndVector();
 			addActorToGameEngine();
-			defineGraphics3();
+			addChild(Main.getClassFromSWF("assets", "blue"));
 		}
 		
 		//the enter frame, does everything
