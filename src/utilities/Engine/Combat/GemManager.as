@@ -217,7 +217,6 @@
 		}
 		
 		private function checkForMatches():void {
-			trace("checkForMatches:",currentTurn);
 			//for gem in the outer circe, take its index / divide it by 2 and floor it to get the one below
 			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 				if (gemsRing_2[i].getGemType() == gemsRing_1[~~(i / 2)].getGemType() ) {
@@ -229,22 +228,27 @@
 					}
 				}
 			}
-			checkForTurnSequenceOver();
+			
+			incrementTurnSequence();
+			//checkForTurnSequenceOver();
 		}
 		
-		private function turnSequencer():void {
-			activeRotatingArray = turnSequence[currentTurn];
+		private function incrementTurnSequence():void {
 			currentTurn++;
+			activeRotatingArray = turnSequence[currentTurn];
+			trace("incrementTurnSequence: currentTurn:",currentTurn);
+			if (currentTurn > maxTurns) {
+				trace("turn sequence has ended:",currentTurn);
+				for (var i:int = 0; i < gemsRing_2.length; i++ ) {
+					gemsRing_2[i].triggerMatchEvent();
+				}
+				currentTurn = 0;
+				activeRotatingArray = turnSequence[currentTurn];
+			}
 		}
 		
 		private function checkForTurnSequenceOver():void {
-			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
-				if (currentTurn == maxTurns) {
-					trace("checkForTurnSequenceOver: currentTurn:",currentTurn);
-					gemsRing_2[i].triggerMatchEvent();
-					currentTurn = 0;
-				}
-			}
+			
 		}
 		
 		private function removeKeyListeners():void{
@@ -259,7 +263,6 @@
 					obliterateAllGems();
 				}
 				if (e.keyCode == 37) {
-					turnSequencer();
 					if (activeRotatingArray == 0) {
 						rotateArrayLeft(gemsRing_0);
 					}
@@ -275,7 +278,6 @@
 					createNewRings();
 				}
 				if(e.keyCode == 39){
-					turnSequencer();
 					if (activeRotatingArray == 0) {
 						rotateArrayRight(gemsRing_0);
 					}
