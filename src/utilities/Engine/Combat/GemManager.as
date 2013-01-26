@@ -175,6 +175,7 @@
 				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
 				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
 			}
+			checkForMatches();
 		}
 		
 		private function resetRingsRight(ringsArray:Array):void {
@@ -185,17 +186,24 @@
 				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
 				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
 			}
+			checkForMatches();
 		}
 		
 		private function checkForMatches():void {
-			for each(var gem0:Gem in gemsRing_0) {
-				trace(gem0.getGemType());
-			}
-			for each(var gem1:Gem in gemsRing_1) {
-				trace(gem1.getGemType());
-			}
-			for each(var gem2:Gem in gemsRing_2) {
-				trace(gem2.getGemType());
+			//for gem in the outer circe, take its index / divide it by 2 and floor it to get the one below
+			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
+				if (gemsRing_2[i].getGemType() == gemsRing_1[~~(i / 2)].getGemType() ) {
+					if (gemsRing_1[~~(i / 2)].getGemType() == gemsRing_0[~~(i / 4)].getGemType()) {
+						//return true;
+						gemsRing_2[i].alpha = .5;
+						gemsRing_1[~~(i / 2)].alpha = .5;
+						gemsRing_0[~~(i / 4)].alpha = .5;
+					}else {
+						gemsRing_2[i].alpha = 1;
+						gemsRing_1[~~(i / 2)].alpha = 1;
+						gemsRing_0[~~(i / 4)].alpha = 1;
+					}
+				}
 			}
 		}
 		
@@ -205,7 +213,7 @@
 		}
 		
 		private function keyDownHandler(e:KeyboardEvent):void {
-			checkForMatches();
+		
 			if(isKeysEnabled == true){
 				if(e.keyCode == 32){
 				//	Key_space=true;

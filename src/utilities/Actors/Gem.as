@@ -26,7 +26,7 @@ package utilities.Actors{
 			addActorToGameEngine();
 
 			setGemType();
-			addChild(Main.getClassFromSWF("assets", "blue"));
+			addChild(Main.getClassFromSWF("assets", gemType));
 		}
 		
 		//the enter frame, does everything
