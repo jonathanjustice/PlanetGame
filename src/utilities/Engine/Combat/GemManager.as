@@ -11,7 +11,7 @@
 	import utilities.Actors.Bullet;
 	import utilities.Input.KeyInputManager;
 	import utilities.Input.MouseInputManager;
-	import com.greensock.TweenMax
+	import com.greensock.TweenMax;
 	import flash.events.KeyboardEvent;
 	public class GemManager extends utilities.Engine.DefaultManager{
 		
@@ -86,15 +86,14 @@
 		}
 		
 		private function arrangeMyGems(ringArray:Array, ringNumber:int):void {
+			
 			for (var i:int = 0; i < ringArray.length; i++) {
 				var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
 				ringArray[i].x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
 				ringArray[i].y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
-	
 				var gemPoint:Point = new Point();
 				gemPoint.x = ringArray[i].x;
 				gemPoint.y = ringArray[i].y;
-				
 				ringArray[i].rotation = MathFormulas.getAngle(gemPoint, originPoint);
 			}
 		}
@@ -110,62 +109,78 @@
 		
 		}
 		
-		private function rotateArray():void {
-			//var gemToTweenTo:Gem;
-			trace("rotateArray");
+		private function rotateArrayLeft(gemArray:Array):void {
+			trace("rotate array")
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
-			switch (activeRotatingArray) {
-				case 2:
-						for (var i:int = 0; i < gemsRing_2.length; i++) {
-							if (i == 0) {
-								tweenPoint = getPositionOfGem(gemsRing_2, gemsRing_2.length-1);
-								gemsRing_2[i].setTargetTweenPoint(tweenPoint);
-								//trace(tweenPoint);
-							}else {
-								tweenPoint = getPositionOfGem(gemsRing_2, (i-1));
-								gemsRing_2[i].setTargetTweenPoint(tweenPoint);
-								//trace(tweenPoint);
-							}
-						}
-						for (var j:int = 0; j < gemsRing_2.length; j++) {
-							
-							TweenMax.to(gemsRing_2[j], 1, { x:gemsRing_2[j].getTargetTweenPoint().x, y:gemsRing_2[j].getTargetTweenPoint().y, onComplete:incrementCompleted } );
-							function incrementCompleted():void{
-								completedTweens++;
-								if (completedTweens == gemsRing_2.length) {
-									crash();
-								}
-							}
-							
-						}
-					
-						/*for each(var gemA:Gem in gemsRing_0) {
-							//gemA.x -= 25;
-							//object, time, destination, event when reach target
-							TweenMax.to(gemA, 10, { x:0, y:0, onComplete:crash } );
-							
-							function crash():void {
-								trace (":(");
-							}
-							
-						}*/
-					break;
-				
+		
+			for (var i:int = 0; i < gemArray.length; i++) {
+				if (i == 0) {
+					tweenPoint = getPositionOfGem(gemArray, gemArray.length-1);
+					gemArray[i].setTargetTweenPoint(tweenPoint);
+				}else {
+					tweenPoint = getPositionOfGem(gemArray, (i-1));
+					gemArray[i].setTargetTweenPoint(tweenPoint);
+				}
 			}
-			
-		//	trace("activeRotatingArray", activeRotatingArray);
+			for (var j:int = 0; j < gemArray.length; j++) {
+				
+				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
+				function resetGems():void{
+					completedTweens++;
+					if (completedTweens == gemArray.length) {
+						resetRingsLeft(gemArray);
+						completedTweens = 0;
+					}
+				}
+			}
 		}
 		
-		public function crash():void {
+		private function rotateArrayRight(gemArray:Array):void {
+			trace("rotate array")
+			var tweenPoint:Point = new Point();
+			var completedTweens:int = 0;
+		
+			for (var i:int = 0; i < gemArray.length; i++) {
+				if (i == gemArray.length-1) {
+					tweenPoint = getPositionOfGem(gemArray, 0);
+					gemArray[i].setTargetTweenPoint(tweenPoint);
+				}else {
+					tweenPoint = getPositionOfGem(gemArray, (i+1));
+					gemArray[i].setTargetTweenPoint(tweenPoint);
+				}
+			}
+			for (var j:int = 0; j < gemArray.length; j++) {
+				
+				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
+				function resetGems():void{
+					completedTweens++;
+					if (completedTweens == gemArray.length) {
+						resetRingsRight(gemArray);
+						completedTweens = 0;
+					}
+				}
+			}
+		}
+		
+		public function resetRingsLeft(ringsArray:Array):void {
 			trace (":(");
 			isKeysEnabled  = true;
-			gemsRing_2.push(gemsRing_2.shift());
-			for (var iiii:int = 0; iiii <  gemsRing_2.length ; iiii++ ) {
-				var newTweenPoint:Point = getPositionOfGem(gemsRing_2, (iiii-1));
-				gemsRing_2[iiii].setTargetTweenPoint(newTweenPoint);
-				
-			//	Gems(gemsRing_2[iiii]) getPositionOfGem(gemsRing_2, iiii);
+			ringsArray.push(ringsArray.shift());
+			for (var iiii:int = 0; iiii <  ringsArray.length ; iiii++ ) {
+				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
+				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
+			}
+		}
+		
+		public function resetRingsRight(ringsArray:Array):void {
+			trace (":(");
+			isKeysEnabled  = true;
+			ringsArray.unshift(ringsArray.pop())
+		//	ringsArray.push(ringsArray.shift());
+			for (var iiii:int = 0; iiii <  ringsArray.length ; iiii++ ) {
+				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
+				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
 			}
 		}
 		
@@ -177,28 +192,55 @@
 		public function keyDownHandler(e:KeyboardEvent):void {
 			
 			if(isKeysEnabled == true){
-				//trace(e.keyCode);
+				trace("enabled",e.keyCode);
 				if(e.keyCode == 32){
 				//	Key_space=true;
-				}//
+				}
 				if(e.keyCode == 37){
-					//Key_left_2=true;
-					rotateArray();
+					if (activeRotatingArray == 0) {
+						rotateArrayLeft(gemsRing_0);
+					}
+					if (activeRotatingArray == 1) {
+						rotateArrayLeft(gemsRing_1);
+					}
+					if (activeRotatingArray == 2) {
+						rotateArrayLeft(gemsRing_2);
+					}
+					
 					isKeysEnabled  = false;
-					trace("keydown",e.keyCode);
+					trace("keydown left:",e.keyCode);
 					
 				}
 				if(e.keyCode == 38){
 				//	Key_up_2=true;
 				}
 				if(e.keyCode == 39){
-					//Key_right_2=true;
+					
+					if (activeRotatingArray == 0) {
+						rotateArrayRight(gemsRing_0);
+					}
+					if (activeRotatingArray == 1) {
+						rotateArrayRight(gemsRing_1);
+					}
+					if (activeRotatingArray == 2) {
+						rotateArrayRight(gemsRing_2);
+					}
+					
 					isKeysEnabled  = false;
+					trace("keydown right:",e.keyCode);
 				}
 				if(e.keyCode == 40){
 					//Key_down_2=true;
 				}
-				//isKeysEnabled = false;
+				if(e.keyCode == 49){
+					activeRotatingArray = 0;
+				}
+				if(e.keyCode == 50){
+					activeRotatingArray = 1;
+				}
+				if(e.keyCode == 51){
+					activeRotatingArray = 2;
+				}
 			}
 		}
 		
@@ -212,7 +254,7 @@
 				if(e.keyCode == 37){
 					//Key_left_2 = false;
 					//isKeysEnabled  = true;
-					trace("keyup",e.keyCode);
+					//trace("keyup",e.keyCode);
 					
 				}
 				if(e.keyCode == 38){
@@ -225,6 +267,7 @@
 				if(e.keyCode == 40){
 					//Key_down_2=false;
 				}
+				
 				//isKeysEnabled = true;
 			}
 		}
