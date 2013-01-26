@@ -43,11 +43,9 @@
 		public function setUp():void{
 			numnum = 0;
 			setUpRings();
-			
-			trace("GemManager:setUp");
 		}
 		
-		public function setUpRings():void {
+		private function setUpRings():void {
 			for (var i:int = 0; i < gemRingSize_0; i++) {
 				addGemToRing(gemsRing_0);
 			}
@@ -57,9 +55,6 @@
 			for (var k:int = 0; k < gemRingSize_2; k++) {
 				addGemToRing(gemsRing_2);
 			}
-			//trace("gemsRing_0:", gemsRing_0);
-			//trace("gemsRing_1:", gemsRing_1);
-			//trace("gemsRing_2:", gemsRing_2);
 			arrangeMyGems(gemsRing_0,0);
 			arrangeMyGems(gemsRing_1,1);
 			arrangeMyGems(gemsRing_2,2);
@@ -81,7 +76,6 @@
 			var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
 			positionOfGem.x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
 			positionOfGem.y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
-			trace("positionOfGem", positionOfGem);
 			return positionOfGem;
 		}
 		
@@ -110,7 +104,6 @@
 		}
 		
 		private function rotateArrayLeft(gemArray:Array):void {
-			trace("rotate array")
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
 		
@@ -137,7 +130,6 @@
 		}
 		
 		private function rotateArrayRight(gemArray:Array):void {
-			trace("rotate array")
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
 		
@@ -163,8 +155,7 @@
 			}
 		}
 		
-		public function resetRingsLeft(ringsArray:Array):void {
-			trace (":(");
+		private function resetRingsLeft(ringsArray:Array):void {
 			isKeysEnabled  = true;
 			ringsArray.push(ringsArray.shift());
 			for (var iiii:int = 0; iiii <  ringsArray.length ; iiii++ ) {
@@ -173,8 +164,7 @@
 			}
 		}
 		
-		public function resetRingsRight(ringsArray:Array):void {
-			trace (":(");
+		private function resetRingsRight(ringsArray:Array):void {
 			isKeysEnabled  = true;
 			ringsArray.unshift(ringsArray.pop())
 		//	ringsArray.push(ringsArray.shift());
@@ -184,15 +174,26 @@
 			}
 		}
 		
-		public function removeKeyListeners():void{
+		private function checkForMatches():void {
+			for each(var gem0:Gem in gemsRing_0) {
+				trace(gem0.getGemType());
+			}
+			for each(var gem1:Gem in gemsRing_1) {
+				trace(gem1.getGemType());
+			}
+			for each(var gem2:Gem in gemsRing_2) {
+				trace(gem2.getGemType());
+			}
+		}
+		
+		private function removeKeyListeners():void{
 			Main.theStage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			Main.theStage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 		}
 		
-		public function keyDownHandler(e:KeyboardEvent):void {
-			
+		private function keyDownHandler(e:KeyboardEvent):void {
+			checkForMatches();
 			if(isKeysEnabled == true){
-				trace("enabled",e.keyCode);
 				if(e.keyCode == 32){
 				//	Key_space=true;
 				}
@@ -206,9 +207,7 @@
 					if (activeRotatingArray == 2) {
 						rotateArrayLeft(gemsRing_2);
 					}
-					
 					isKeysEnabled  = false;
-					trace("keydown left:",e.keyCode);
 					
 				}
 				if(e.keyCode == 38){
@@ -225,9 +224,7 @@
 					if (activeRotatingArray == 2) {
 						rotateArrayRight(gemsRing_2);
 					}
-					
 					isKeysEnabled  = false;
-					trace("keydown right:",e.keyCode);
 				}
 				if(e.keyCode == 40){
 					//Key_down_2=true;
@@ -244,31 +241,21 @@
 			}
 		}
 		
-		public function keyUpHandler(e:KeyboardEvent):void {
+		private function keyUpHandler(e:KeyboardEvent):void {
 			
 			if(isKeysEnabled == false){
 				
 				if(e.keyCode == 32){
-					//Key_space=false;
 				}
 				if(e.keyCode == 37){
-					//Key_left_2 = false;
-					//isKeysEnabled  = true;
-					//trace("keyup",e.keyCode);
 					
 				}
 				if(e.keyCode == 38){
-					//Key_up_2=false;
 				}
 				if(e.keyCode == 39){
-					//Key_right_2=false;
-					//isKeysEnabled  = true;
 				}
 				if(e.keyCode == 40){
-					//Key_down_2=false;
 				}
-				
-				//isKeysEnabled = true;
 			}
 		}
 		
