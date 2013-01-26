@@ -14,6 +14,7 @@
 	import utilities.Input.MouseInputManager;
 	import com.greensock.TweenMax;
 	import flash.events.KeyboardEvent;
+	import flash.utils.getTimer;
 	import com.greensock.*;
 	import flash.events.*;
 	import flash.geom.*;
@@ -22,8 +23,11 @@
 	import utilities.Mathematics.*;
 	import utilities.Audio.*;
 	
-	public class GemManager extends utilities.Engine.DefaultManager{
-		
+	public class GemManager extends utilities.Engine.DefaultManager {
+		private var gameStarted:Boolean = false;
+		private var turnStartedTime:Number = 0;
+		private var turnLength:Number = 3000;
+		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
 		private var currentTurn:int = 0;
@@ -48,7 +52,8 @@
 			turnSequence = [2, 1, 0, 1, 2];
 
 			var a:SoundManager = new SoundManager();
-
+			setTurnStartTime();
+			gameStarted = true;
 		}
 		
 		public function setUp():void{
@@ -128,7 +133,9 @@
 		//FPO way to create enemies
 		//check the enemies for collisions with bullets
 		public override function updateLoop():void {
-		
+			if (gameStarted) {
+				checkForTurnTimeExpired();
+			}
 		}
 		
 		private function rotateArrayLeft(gemArray:Array):void {
@@ -228,9 +235,6 @@
 					}
 				}
 			}
-			
-			incrementTurnSequence();
-			//checkForTurnSequenceOver();
 		}
 		
 
@@ -248,10 +252,6 @@
 				activeRotatingArray = turnSequence[currentTurn];
 			}
 			planet.setFrame("_"+activeRotatingArray);
-		}
-		
-		private function checkForTurnSequenceOver():void {
-			
 		}
 		
 		private function removeKeyListeners():void{
@@ -325,8 +325,6 @@
 			}
 		}
 		
-		
-		
 		public override function getArrayLength():int{
 			return gemsRing_0.length;
 		}
@@ -337,6 +335,19 @@
 		
 		public override function getArray():Array{
 			return gemsRing_0;
+		}
+		
+		private function setTurnStartTime():void{
+			turnStartedTime = getTimer();
+		}
+		
+		private function checkForTurnTimeExpired():void{
+			//get timer from the BulletManager and see if the bullet has been alive too long
+			var currentTime:uint = getTimer();
+			if(currentTime > turnStartedTime + turnLength){
+				incrementTurnSequence();
+				setTurnStartTime();
+			}
 		}
 	}
 }
