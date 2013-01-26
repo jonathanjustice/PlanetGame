@@ -17,12 +17,12 @@
 	import flash.system.ApplicationDomain;
 	
 	/*bulk loader*/
-	/*import br.com.stimuli.loading.BulkLoader;
+	import br.com.stimuli.loading.BulkLoader;
 	import br.com.stimuli.loading.BulkProgressEvent;
 	import br.com.stimuli.loading.lazyloaders.LazyXMLLoader;
-*/
+	
 	public class Main extends MovieClip{
-	//public var loader:LazyXMLLoader;
+	public var loader:LazyXMLLoader;
 	//public var _loadingSWF:DisplayObject;
 		
 		public static var theStage:Object;
@@ -42,10 +42,9 @@
 		//once the stage exists, launch the game
         private function init(e:Event = null):void {
             removeEventListener(Event.ADDED_TO_STAGE, init);
-			//loader = new LazyXMLLoader("assets/assets.xml","assets",5);
-			//loader.addEventListener(BulkProgressEvent.COMPLETE,doneLoading);
-			//loader.start();
-			initialSetup();
+			loader = new LazyXMLLoader("assets/assets.xml","assets",5);
+			loader.addEventListener(BulkProgressEvent.COMPLETE,doneLoading);
+			loader.start();
 			
         }
 		
@@ -96,10 +95,20 @@
 			return mousePoint;
 		}
 		
+		public static function getClassFromSWF(assetID:String,classID:String,loaderID:String="assets"):MovieClip{
+			var bulkLoader:BulkLoader = BulkLoader.getLoader(loaderID);
+			var swfLoader:MovieClip= bulkLoader.getMovieClip(assetID);
+			var swf:ApplicationDomain = swfLoader.loaderInfo.applicationDomain
+			var view:MovieClip = MovieClip(new (swf.getDefinition(classID) as Class)() as MovieClip);
+			return view;
+		}
+		
 		private function doneLoading(e:Event):void{
 			//loadUI();
 			//tileLoad();
-			openStartScreen();
+			
+			initialSetup();
+			//openStartScreen();
 			//stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDown);
 			//stage.addEventListener(KeyboardEvent.KEY_UP,onKeyUp);
 			//tracker.trackPageview( "/game/loaded" );

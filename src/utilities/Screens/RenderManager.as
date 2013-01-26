@@ -1,4 +1,4 @@
-﻿package utilities{
+﻿package utilities.Screens{
 	public class RenderManager extends MovieClip{
 		public function RenderManager(){
 			

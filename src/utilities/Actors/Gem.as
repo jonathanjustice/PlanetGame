@@ -24,8 +24,9 @@ package utilities.Actors{
 		
 		public function setUp():void{
 			addActorToGameEngine();
-			defineGraphics3();
+
 			setGemType();
+			addChild(Main.getClassFromSWF("assets", "blue"));
 		}
 		
 		//the enter frame, does everything

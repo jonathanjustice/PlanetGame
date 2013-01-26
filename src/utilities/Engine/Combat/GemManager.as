@@ -1,5 +1,6 @@
 ﻿package utilities.Engine.Combat{
 	
+
 	import com.greensock.plugins.EndVectorPlugin;
 	import utilities.Actors.Gem;
 	import utilities.Engine.DefaultManager;
@@ -13,6 +14,12 @@
 	import utilities.Input.MouseInputManager;
 	import com.greensock.TweenMax;
 	import flash.events.KeyboardEvent;
+	import com.greensock.*;
+	import flash.events.*;
+	import flash.geom.*;
+	import utilities.Actors.*;
+	import utilities.Engine.*;
+	import utilities.Mathematics.*;
 	public class GemManager extends utilities.Engine.DefaultManager{
 		
 		
@@ -46,6 +53,11 @@
 		}
 		
 		private function setUpRings():void {
+
+			var planet:Planet = new Planet();
+			planet.x = originPoint.x;
+			planet.y = originPoint.y;
+
 			for (var i:int = 0; i < gemRingSize_0; i++) {
 				addGemToRing(gemsRing_0);
 			}
@@ -74,8 +86,9 @@
 				ringNumber = 2;
 			}
 			var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
-			positionOfGem.x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
-			positionOfGem.y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
+
+			positionOfGem.x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
+			positionOfGem.y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 			return positionOfGem;
 		}
 		
@@ -83,8 +96,8 @@
 			
 			for (var i:int = 0; i < ringArray.length; i++) {
 				var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
-				ringArray[i].x = Math.cos(angle) * ((70 * ringNumber) + 70)+ originPoint.x;
-				ringArray[i].y = Math.sin(angle)  * ((70 * ringNumber) + 70) + originPoint.y;
+				ringArray[i].x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
+				ringArray[i].y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 				var gemPoint:Point = new Point();
 				gemPoint.x = ringArray[i].x;
 				gemPoint.y = ringArray[i].y;
@@ -106,7 +119,7 @@
 		private function rotateArrayLeft(gemArray:Array):void {
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
-		
+
 			for (var i:int = 0; i < gemArray.length; i++) {
 				if (i == 0) {
 					tweenPoint = getPositionOfGem(gemArray, gemArray.length-1);
@@ -117,7 +130,7 @@
 				}
 			}
 			for (var j:int = 0; j < gemArray.length; j++) {
-				
+
 				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
 				function resetGems():void{
 					completedTweens++;
