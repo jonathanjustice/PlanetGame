@@ -49,10 +49,10 @@
 		
 		public function setUp():void{
 			numnum = 0;
-			setUpRings();
+			createNewRings();
 		}
 		
-		private function setUpRings():void {
+		private function createNewRings():void {
 
 			var planet:Planet = new Planet();
 			planet.x = originPoint.x;
@@ -70,6 +70,18 @@
 			arrangeMyGems(gemsRing_0,0);
 			arrangeMyGems(gemsRing_1,1);
 			arrangeMyGems(gemsRing_2,2);
+		}
+		
+		private function obliterateAllGems():void {
+			while (gemsRing_0.length) {
+				gemsRing_0[0].removeActorFromGameEngine(gemsRing_0[0],gemsRing_0);
+			}
+			while (gemsRing_1.length) {
+				gemsRing_1[0].removeActorFromGameEngine(gemsRing_1[0],gemsRing_1);
+			}
+			while (gemsRing_2.length) {
+				gemsRing_2[0].removeActorFromGameEngine(gemsRing_2[0],gemsRing_2);
+			}
 		}
 		
 		private function getPositionOfGem(ringArray:Array, indexOfGem:int):Point {
@@ -195,7 +207,7 @@
 			checkForMatches();
 		}
 		
-		private function setAllMatchesTofalse(ringsArray):void {
+		private function setAllMatchesTofalse(ringsArray:Array):void {
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				ringsArray[i].setIsMatching(false);
 			}
@@ -224,7 +236,7 @@
 		
 			if(isKeysEnabled == true){
 				if(e.keyCode == 32){
-				//	Key_space=true;
+					obliterateAllGems();
 				}
 				if(e.keyCode == 37){
 					if (activeRotatingArray == 0) {
@@ -240,7 +252,7 @@
 					
 				}
 				if(e.keyCode == 38){
-				//	Key_up_2=true;
+					createNewRings();
 				}
 				if(e.keyCode == 39){
 					

@@ -73,7 +73,7 @@ package utilities.Actors{
 			return gemType;
 		}
 		
-		public function setIsMatching(boo:Boolean) {
+		public function setIsMatching(boo:Boolean):void {
 			isMatching = boo;
 			highlightMatches();
 		}
