@@ -86,6 +86,12 @@ package utilities.Actors{
 			}
 		}
 		
+		public function triggerMatchEvent():void {
+			if (isMatching) {
+				this.alpha = 0;
+			}
+		}
+		
 		public override function defineProperties():void{
 			//classes to get behaviors from
 			

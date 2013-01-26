@@ -22,18 +22,15 @@
 	import utilities.Mathematics.*;
 	public class GemManager extends utilities.Engine.DefaultManager{
 		
-		
-		private var avatar:Point = new Point();
-		public var numEnemies:Number = 0;
+		private var maxTurns:int = 4;
+		private var turnSequence:Array = new Array();
+		private var currentTurn:int = 0;
 		public static var activeRotatingArray:int = 2;
 		
 		public static var gemsRing_0:Array=new Array();
 		public static var gemsRing_1:Array=new Array();
 		public static var gemsRing_2:Array=new Array();
-		//private static var enemyFactory = new Factory_Enemy();
-		public static var shittyTimer:int = 0;
-		
-		private static var numnum:Number = 0;
+	
 		private static var gemRingSize_0:int = 4;
 		private static var gemRingSize_1:int = 8;
 		private static var gemRingSize_2:int = 16;
@@ -45,10 +42,10 @@
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			Main.theStage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			isKeysEnabled = true;
+			turnSequence = [2, 1, 0, 1, 2];
 		}
 		
 		public function setUp():void{
-			numnum = 0;
 			createNewRings();
 		}
 		
@@ -214,6 +211,7 @@
 		}
 		
 		private function checkForMatches():void {
+			trace("checkForMatches:",currentTurn);
 			//for gem in the outer circe, take its index / divide it by 2 and floor it to get the one below
 			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 				if (gemsRing_2[i].getGemType() == gemsRing_1[~~(i / 2)].getGemType() ) {
@@ -223,6 +221,22 @@
 						gemsRing_1[~~(i / 2)].setIsMatching(true);
 						gemsRing_0[~~(i / 4)].setIsMatching(true);
 					}
+				}
+			}
+			checkForTurnSequenceOver();
+		}
+		
+		private function turnSequencer():void {
+			activeRotatingArray = turnSequence[currentTurn];
+			currentTurn++;
+		}
+		
+		private function checkForTurnSequenceOver():void {
+			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
+				if (currentTurn == maxTurns) {
+					trace("checkForTurnSequenceOver: currentTurn:",currentTurn);
+					gemsRing_2[i].triggerMatchEvent();
+					currentTurn = 0;
 				}
 			}
 		}
@@ -238,7 +252,8 @@
 				if(e.keyCode == 32){
 					obliterateAllGems();
 				}
-				if(e.keyCode == 37){
+				if (e.keyCode == 37) {
+					turnSequencer();
 					if (activeRotatingArray == 0) {
 						rotateArrayLeft(gemsRing_0);
 					}
@@ -249,13 +264,12 @@
 						rotateArrayLeft(gemsRing_2);
 					}
 					isKeysEnabled  = false;
-					
 				}
 				if(e.keyCode == 38){
 					createNewRings();
 				}
 				if(e.keyCode == 39){
-					
+					turnSequencer();
 					if (activeRotatingArray == 0) {
 						rotateArrayRight(gemsRing_0);
 					}
