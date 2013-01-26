@@ -18,15 +18,17 @@ package utilities.Actors{
 		private var gemType:String = "";
 		private var isMatching:Boolean=false;
 	
-		public function Gem(){
+		public function Gem(newType:String) {
+			gemType = newType;
 			setUp();
 		}
 		
 		
 		public function setUp():void{
 			addActorToGameEngine();
-
-			setGemType();
+			if (gemType == "random"){
+				setRandomGemType();
+			}
 			addChild(Main.getClassFromSWF("assets", gemType));
 		}
 		
@@ -43,9 +45,12 @@ package utilities.Actors{
 			return targetTweenPoint;
 		}
 		
+		public function setGemType(newType:String):void {
+			gemType = newType;
+		}
 		
 		//TEMPORARY
-		private function setGemType():void {
+		private function setRandomGemType():void {
 			var randomNumber:Number = Math.floor(Math.random() * 6);
 			switch (randomNumber) {
 				case 0:
@@ -76,6 +81,10 @@ package utilities.Actors{
 		public function setIsMatching(boo:Boolean):void {
 			isMatching = boo;
 			highlightMatches();
+		}
+		
+		public function getIsMatching():Boolean {
+			return isMatching;
 		}
 		
 		private function highlightMatches():void {

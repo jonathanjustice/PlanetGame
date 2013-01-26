@@ -32,11 +32,9 @@
 		private var turnSequence:Array = new Array();
 		private var currentTurn:int = 0;
 		public static var activeRotatingArray:int = 2;
-		
 		public static var gemsRing_0:Array=new Array();
 		public static var gemsRing_1:Array=new Array();
 		public static var gemsRing_2:Array=new Array();
-	
 		private static var gemRingSize_0:int = 4;
 		private static var gemRingSize_1:int = 8;
 		private static var gemRingSize_2:int = 16;
@@ -48,9 +46,7 @@
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			Main.theStage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			isKeysEnabled = true;
-
 			turnSequence = [2, 1, 0, 1, 2];
-
 			var a:SoundManager = new SoundManager();
 			setTurnStartTime();
 			gameStarted = true;
@@ -61,19 +57,18 @@
 		}
 		
 		private function createNewRings():void {
-
 			planet = new Planet();
 			planet.x = originPoint.x;
 			planet.y = originPoint.y;
 
 			for (var i:int = 0; i < gemRingSize_0; i++) {
-				addGemToRing(gemsRing_0);
+				addRandomGemToRing(gemsRing_0);
 			}
 			for (var j:int = 0; j < gemRingSize_1; j++) {
-				addGemToRing(gemsRing_1);
+				addRandomGemToRing(gemsRing_1);
 			}
 			for (var k:int = 0; k < gemRingSize_2; k++) {
-				addGemToRing(gemsRing_2);
+				addRandomGemToRing(gemsRing_2);
 			}
 			arrangeMyGems(gemsRing_0,0);
 			arrangeMyGems(gemsRing_1,1);
@@ -106,14 +101,12 @@
 				ringNumber = 2;
 			}
 			var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
-
 			positionOfGem.x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
 			positionOfGem.y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 			return positionOfGem;
 		}
 		
 		private function arrangeMyGems(ringArray:Array, ringNumber:int):void {
-			
 			for (var i:int = 0; i < ringArray.length; i++) {
 				var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
 				ringArray[i].x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
@@ -125,13 +118,11 @@
 			}
 		}
 		
-		private function addGemToRing(ringArray:Array):void {
-			var gem:Gem = new Gem();
+		private function addRandomGemToRing(ringArray:Array):void {
+			var gem:Gem = new Gem("random");
 			ringArray.push(gem);
 		}
 		
-		//FPO way to create enemies
-		//check the enemies for collisions with bullets
 		public override function updateLoop():void {
 			if (gameStarted) {
 				checkForTurnTimeExpired();
@@ -205,8 +196,7 @@
 		
 		private function resetRingsRight(ringsArray:Array):void {
 			isKeysEnabled  = true;
-			ringsArray.unshift(ringsArray.pop())
-		//	ringsArray.push(ringsArray.shift());
+			ringsArray.unshift(ringsArray.pop());
 			for (var iiii:int = 0; iiii <  ringsArray.length ; iiii++ ) {
 				var newTweenPoint:Point = getPositionOfGem(ringsArray, (iiii-1));
 				ringsArray[iiii].setTargetTweenPoint(newTweenPoint);
@@ -237,10 +227,20 @@
 			}
 		}
 		
-
+		private function resolveMatches(ringsArray:Array):void {
+			trace("Before",ringsArray);
+			for (var i:int = 0; i < ringsArray.length; i++ ) {
+				if (ringsArray[i].getIsMatching()) {
+					var gem:Gem = new Gem("blue");
+					gem.x = ringsArray[i].x;
+					gem.y = ringsArray[i].y;
+					ringsArray[i].replaceActorInGameEngine(ringsArray[i],ringsArray,gem);
+				}
+			}
+			trace("After",ringsArray);
+		}
 		private function incrementTurnSequence():void {
 			currentTurn++;
-			
 			activeRotatingArray = turnSequence[currentTurn];
 			trace("incrementTurnSequence: currentTurn:",currentTurn);
 			if (currentTurn > maxTurns) {
@@ -248,6 +248,9 @@
 				for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 					gemsRing_2[i].triggerMatchEvent();
 				}
+				resolveMatches(gemsRing_0);
+				resolveMatches(gemsRing_1);
+				resolveMatches(gemsRing_2);
 				currentTurn = 0;
 				activeRotatingArray = turnSequence[currentTurn];
 			}
@@ -260,7 +263,6 @@
 		}
 		
 		private function keyDownHandler(e:KeyboardEvent):void {
-		
 			if(isKeysEnabled == true){
 				if(e.keyCode == 32){
 					obliterateAllGems();
@@ -308,7 +310,6 @@
 		}
 		
 		private function keyUpHandler(e:KeyboardEvent):void {
-			
 			if(isKeysEnabled == false){
 				
 				if(e.keyCode == 32){

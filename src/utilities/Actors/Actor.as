@@ -246,6 +246,14 @@
 			actor.setTargetToFalse();
 		}
 		
+		public function replaceActorInGameEngine(actor:MovieClip,array:Array,itemToSplice:MovieClip):void{
+			actor.availableForTargeting=false;
+			var index:int = array.indexOf(actor);
+			array.splice(index, 1, itemToSplice);
+			utilities.Engine.Game.gameContainer.removeChild(actor);
+			actor.setTargetToFalse();
+		}
+		
 		public function testFunction():void{
 			trace(this,"Actor: class exists, probably means you fucked up somewhere else, or you can't access the object you want inside the class.")
 		}
