@@ -398,8 +398,7 @@
 			activateMatches(gemsRing_1);
 			activateMatches(gemsRing_2);
 			isResolvingMatches = true;
-		}
-		
+		}		
 		private function activateMatches(ringsArray:Array):void {
 			//trace("activateMatches");
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
@@ -408,12 +407,19 @@
 					ringsArray[i].activateFinalMatchHighlightState();
 				}
 			}
-		}
+		}		
+		
+		
 		
 		private function resolveMatches(ringsArray:Array):void {
 			//trace("resolveMatches");
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
+					
+					if (ringsArray == gemsRing_2) {
+						SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+					}
+					
 					var gem:Gem = new Gem("rock");
 					gem.x = ringsArray[i].x;
 					gem.y = ringsArray[i].y;

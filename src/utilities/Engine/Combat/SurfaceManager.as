@@ -13,9 +13,10 @@
 		private var menboats:Array;
 		private var waves:Array;
 		private var cities:Array;
-
+		public static var inst:SurfaceManager;
 		public function SurfaceManager(){
 			setUp();
+			inst = this;
 		}
 		
 		public function setUp():void{
@@ -24,18 +25,8 @@
 		
 		private function createMenBoats():void {
 			menboats = new Array();
-			for (var i:int = 0; i < 8; i++ ) {
-				var manboat:Manboat = new Manboat();
-				manboat.x = Math.random() * CIRCUMFERENCE;
-				menboats.push(manboat);
-			}
-			
+
 			waves = new Array();
-			for (var j:int = 0; j < 1; j++ ) {
-				var wave:Wave = new Wave();
-				wave.x = Math.random() * CIRCUMFERENCE;
-				waves.push(wave);
-			}
 			
 			cities = new Array();
 			for (var i:int = 0; i < 1; i++ ) {
@@ -49,6 +40,20 @@
 		
 		public function addManboat(manboat:Manboat) {
 			menboats.push(manboat);
+		}
+		
+		
+		public function makeWaves(angle:Number):void {
+			
+			trace(angle);
+			
+			var wave1:Wave = new Wave(false);
+			wave1.x = (angle / 360) * CIRCUMFERENCE;
+			
+			var wave2:Wave = new Wave(true);
+			wave2.x = (angle / 360) * CIRCUMFERENCE;
+			
+			waves.push(wave1,wave2)
 		}
 		
 		public override function updateLoop():void {
@@ -71,6 +76,9 @@
 					wave.puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - wave.x;
 					wave.puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
 				}
+				if (wave.decay < 0) {
+					wave.removeActorFromGameEngine(wave, waves);
+				}
 				
 				for each (var manboat2:Manboat in menboats) {
 					if (manboat2.getBoundingRect().intersects(wave.getBoundingRect())) {
@@ -79,15 +87,12 @@
 						utilities.Engine.UIManager.addToScore(50);
 					}
 				}
-				
-				
-				for each (var city:City in cities) {
-					city.tick(this);
-				}
-				
-				
+
 			}
 			
+			for each (var city:City in cities) {
+					city.tick(this);
+			}
 			
 		}
 		

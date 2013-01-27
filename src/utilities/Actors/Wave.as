@@ -1,5 +1,6 @@
 package utilities.Actors 
 {
+	import br.com.stimuli.loading.BulkLoader;
 	import flash.display.MovieClip;
 	import flash.geom.Rectangle;
 	import utilities.Engine.Combat.SurfaceManager;
@@ -8,18 +9,19 @@ package utilities.Actors
 	 * @author ...
 	 */
 	public class Wave extends Actor {
-
+		public var decay:int;
 		public var puppet:MovieClip;
 		private var direction:int;
 		
-		public function Wave() 
+		public function Wave(left:Boolean) 
 		{
-			setUp();
+			setUp(left);
+			decay = Math.random() * 60 + 60;
 		}
 		
-		public function setUp():void{
+		public function setUp(left:Boolean):void{
 			addActorToGameEngine();
-			if (Math.random()>0.5) {
+			if (left) {
 				direction = -3;
 				puppet = Main.getClassFromSWF("assets", "waveL");
 			}else{
@@ -41,6 +43,8 @@ package utilities.Actors
 			while (x < 0) {
 				x += SurfaceManager.CIRCUMFERENCE;
 			}
+			
+			decay--;
 		}
 		
 	}

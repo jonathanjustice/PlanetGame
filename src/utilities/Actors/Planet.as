@@ -21,14 +21,6 @@ package utilities.Actors
 		
 		public function setUp():void {
 			
-			var background:Shape = new Shape();
-			background.graphics.beginFill(0xc4fefb);
-			background.graphics.drawRect(-800, -600, 1600, 1200);
-			background.graphics.endFill;
-			
-			addChild(background);
-			
-			
 			addActorToGameEngine();
 			world = Main.getClassFromSWF("assets", "WORLD");
 			addChild(world);

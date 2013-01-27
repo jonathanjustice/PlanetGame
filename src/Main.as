@@ -20,7 +20,7 @@
 	import br.com.stimuli.loading.BulkLoader;
 	import br.com.stimuli.loading.BulkProgressEvent;
 	import br.com.stimuli.loading.lazyloaders.LazyXMLLoader;
-	
+	import flash.display.Shape;
 	public class Main extends MovieClip{
 	public var loader:LazyXMLLoader;
 	//public var _loadingSWF:DisplayObject;
@@ -35,6 +35,14 @@
 		//check to see if the stage exists
 		//usually only necessary if this is on the web or deployed inside another swf
 		public function Main():void {
+			
+			var background:Shape = new Shape();
+			background.graphics.beginFill(0xc4fefb);
+			background.graphics.drawRect(-800, -600, 1600, 1200);
+			background.graphics.endFill;
+			
+			addChild(background);
+			
 			if (stage) init();
             else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
