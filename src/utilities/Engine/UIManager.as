@@ -13,7 +13,7 @@
 		private var screen_LevelUp:MovieClip;
 		private var highScoreScreen:MovieClip;
 		private var screenStart:MovieClip;
-		public var score:int = 1000;
+		public static var score:int = 0;
 		public function UIManager(){
 			setUp();
 		}
@@ -36,7 +36,7 @@
 			//trace("start");
 		}
 		
-		public function addToScore(amount:int):void {
+		public static function addToScore(amount:int):void {
 			score += amount;
 		}
 		

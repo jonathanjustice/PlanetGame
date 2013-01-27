@@ -74,7 +74,9 @@
 				
 				for each (var manboat2:Manboat in menboats) {
 					if (manboat2.getBoundingRect().intersects(wave.getBoundingRect())) {
-						manboat2.removeActorFromGameEngine(manboat2,menboats);
+						manboat2.removeActorFromGameEngine(manboat2, menboats);
+						//add score for each man murdered
+						utilities.Engine.UIManager.addToScore(50);
 					}
 					
 				}
