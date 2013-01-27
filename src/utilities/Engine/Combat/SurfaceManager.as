@@ -34,7 +34,7 @@
 			}
 			
 			waves = new Array();
-			for (var i:int = 0; i < 1; i++ ) {
+			for (var j:int = 0; j < 1; j++ ) {
 				var wave:Wave = new Wave();
 				wave.x = Math.random() * CIRCUMFERENCE;
 				waves.push(wave);
@@ -72,9 +72,9 @@
 					wave.puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
 				}
 				
-				for each (var manboat:Manboat in menboats) {
-					if (manboat.getBoundingRect().intersects(wave.getBoundingRect())) {
-						manboat.removeActorFromGameEngine(manboat,menboats);
+				for each (var manboat2:Manboat in menboats) {
+					if (manboat2.getBoundingRect().intersects(wave.getBoundingRect())) {
+						manboat2.removeActorFromGameEngine(manboat2,menboats);
 					}
 					
 				}
