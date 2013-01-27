@@ -26,7 +26,7 @@
 	public class GemManager extends utilities.Engine.DefaultManager {
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var turnLength:Number = 100;
+		private var turnLength:Number = 1000;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -59,15 +59,16 @@
 			planet = new Planet();
 			planet.x = originPoint.x;
 			planet.y = originPoint.y;
+			var targetTween:Point = new Point(0,0)
 
 			for (var i:int = 0; i < gemRingSize_0; i++) {
-				addRandomGemToRing(gemsRing_0);
+				addRandomGemToRing(gemsRing_0,0,0,targetTween);
 			}
 			for (var j:int = 0; j < gemRingSize_1; j++) {
-				addRandomGemToRing(gemsRing_1);
+				addRandomGemToRing(gemsRing_1,0,0,targetTween);
 			}
 			for (var k:int = 0; k < gemRingSize_2; k++) {
-				addRandomGemToRing(gemsRing_2);
+				addRandomGemToRing(gemsRing_2,0,0,targetTween);
 			}
 			arrangeMyGems(gemsRing_0,0);
 			arrangeMyGems(gemsRing_1,1);
@@ -121,8 +122,11 @@
 			}
 		}
 		
-		private function addRandomGemToRing(ringArray:Array):void {
+		private function addRandomGemToRing(ringArray:Array, x:Number, y:Number, pointToTweenTo:Point):void {
 			var gem:Gem = new Gem("random");
+			gem.x = x;
+			gem.y = y;
+			gem.setTargetTweenPoint(pointToTweenTo);
 			ringArray.push(gem);
 		}
 		
@@ -230,15 +234,6 @@
 			}
 		}
 		
-		private function createNewGem(ringArray:Array, spawnPosition:Point, pointToTweenTo:Point,gemType:String):Gem {
-			var gem:Gem = new Gem(gemType);
-			gem.x = spawnPosition.x;
-			gem.y = spawnPosition.y;
-			gem.setTargetTweenPoint(pointToTweenTo);
-			ringArray.push(gem);
-			return gem;
-		}
-		
 		//move the rings out to the next level
 		private function growRingsOut():void {
 			var tempRing2:Array = new Array();
@@ -249,18 +244,26 @@
 		
 			//put all the gems in level 1 into level 2
 			for (var i:int = 0; i < gemsRing_1.length; i++ ) {
+				
+		
 				//move all these up to level 2
 				//for every gem, put 2 gems into the array, randomize whice one to put first
 				order = Math.round(Math.random() * 1);
-				//array, spawn at the same position, the point to tween to, the type
-				var somePoint:Point=new Point(0,0);
-				var gem:Object = createNewGem( gemsRing_1, gemsRing_1[i].getPosition(), somePoint , gemsRing_1[i].getGemType());
-				var randomGem:Gem = createNewGem( gemsRing_1, gemsRing_1[i].getPosition(), somePoint ,"random");
+				var gemType:String = gemsRing_1[i].getGemType();
+				var gem:Gem = new Gem(gemType);
+				gem.x =  gemsRing_1[i].x;
+				gem.y =  gemsRing_1[i].y;
+				var newGemTweenPoint:Point = new Point();
+				var randomGemTweenPoint:Point = new Point();
+				newGemTweenPoint = getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)]);
+				randomGemTweenPoint = getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)+1]);
 				if (order == 1) {
+					gem.setTargetTweenPoint(newGemTweenPoint);
 					tempRing2.push(gem);
-					tempRing2.push(randomGem);
+					addRandomGemToRing(tempRing2,gem.x,gem.y, randomGemTweenPoint);
 				}else {
-					tempRing2.push(randomGem);
+					addRandomGemToRing(tempRing2, gem.x, gem.y,randomGemTweenPoint);
+					gem.setTargetTweenPoint(newGemTweenPoint);
 					tempRing2.push(gem);
 				}
 			}
@@ -268,20 +271,26 @@
 				order = Math.round(Math.random() * 1);
 				var gemType2:String = gemsRing_0[r].getGemType();
 				var gem2:Gem = new Gem(gemType2);
+				gem2.x =  gemsRing_0[r].x;
+				gem2.y =  gemsRing_0[r].y;
+				var newGemTweenPoint2:Point = new Point();
+				var randomGemTweenPoint2:Point = new Point();
+				newGemTweenPoint2 = getPositionOfGem(gemsRing_1,gemsRing_1[(r*2)]);
+				randomGemTweenPoint2 = getPositionOfGem(gemsRing_1,gemsRing_1[(r*2)+1]);
 				if (order == 1) {
-				//	trace("GROW RINGSOUT: NEW GEM");
+					gem2.setTargetTweenPoint(newGemTweenPoint2);
 					tempRing1.push(gem2);
-					//trace("GROW RINGSOUT: RANDOM GEM");
-					addRandomGemToRing(tempRing1);
+					addRandomGemToRing(tempRing1,gem2.x,gem2.y, randomGemTweenPoint2);
 				}else {
-				//	trace("GROW RINGSOUT: RANDOM GEM");
-					addRandomGemToRing(tempRing1);
-					//trace("GROW RINGSOUT: NEW GEM");
+					addRandomGemToRing(tempRing2, gem2.x, gem2.y,randomGemTweenPoint2);
+					gem2.setTargetTweenPoint(newGemTweenPoint2);
 					tempRing1.push(gem2);
 				}
 			}
 			for (var z:int = 0; z < gemRingSize_0; z++) {
-				addRandomGemToRing(tempRing0);
+				var randomGemTweenPoint:Point = new Point();
+				randomGemTweenPoint = getPositionOfGem( gemsRing_1,gemsRing_1[z]);
+				addRandomGemToRing(tempRing0,originPoint.x,originPoint.y,randomGemTweenPoint);
 			}
 			trace("BEFORE");
 			trace(gemsRing_2);

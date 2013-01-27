@@ -114,6 +114,10 @@ package utilities.Actors{
 		
 		}
 		
+		public function getPosition():Point {
+			var position:Point = new Point(this.x, this.y);
+			return position;
+		}
 		
 			
 	}
