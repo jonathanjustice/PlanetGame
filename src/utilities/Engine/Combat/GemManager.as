@@ -24,9 +24,14 @@
 	import utilities.Audio.*;
 	
 	public class GemManager extends utilities.Engine.DefaultManager {
+		private var isMatchesResolved:Boolean = true;
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var turnLength:Number = 1000;
+		private var rockWaitTime:Number = 2500;
+		private var resolveStartedTime:Number = 0;
+		private var resolveLength:Number = 5000;
+		private var isResolvingMatches:Boolean = false;
+		private var turnLength:Number = 3000;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -56,6 +61,7 @@
 		
 		public function setUp():void{
 			createNewRings();
+			checkForMatches();
 		}
 		
 		private function createNewRings():void {
@@ -103,7 +109,6 @@
 				ringNumber = 2;
 			}
 			var angle:Number =  MathFormulas.degreesToRadians(360 * ((i + 0.5) / ringArray.length));
-			trace(angle);
 			positionOfGem.x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
 			positionOfGem.y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 			return positionOfGem;
@@ -125,11 +130,7 @@
 			ringArray.push(gem);
 		}
 		
-		public override function updateLoop():void {
-			if (gameStarted) {
-				checkForTurnTimeExpired();
-			}
-		}
+	
 		
 		private function rotateArrayLeft(gemArray:Array):void {
 			var tweenPoint:Point = new Point();
@@ -234,7 +235,6 @@
 			gem.x = spawnPosition.x;
 			gem.y = spawnPosition.y;
 			gem.setTargetTweenPoint(pointToTweenTo);
-			//trace("pointToTweenTo",pointToTweenTo);
 			ringArray.push(gem);
 			return gem;
 		}
@@ -311,6 +311,34 @@
 				}
 			}
 		}
+		
+		public override function updateLoop():void {
+			if (gameStarted) {
+				if (!isResolvingMatches) {
+					checkForTurnTimeExpired();
+				}else {
+					isKeysEnabled = false;
+					checkForResolveTimeExpired();
+				}
+			}
+		}
+		
+		private function checkForResolveTimeExpired():void {
+			//trace("checkForResolveTimeExpired");
+			var currentTime:uint = getTimer();
+			if (currentTime > resolveStartedTime + rockWaitTime) {
+				if (!isMatchesResolved) {
+					resolveMatches(gemsRing_0);
+					resolveMatches(gemsRing_1);
+					resolveMatches(gemsRing_2);
+				}
+			}
+			if (currentTime > resolveStartedTime + resolveLength + rockWaitTime) {
+				isResolvingMatches = false;
+				isMatchesResolved = true;
+				growRingsOut();
+			}	
+		}
 			
 		private function resetTurnSequence():void {
 			if (innerTweensComplete && middleTweensComplete && outerTweensComplete) {
@@ -319,19 +347,11 @@
 				setAllMatchesTofalse(gemsRing_1);
 				setAllMatchesTofalse(gemsRing_2);
 				checkForMatches();
+				setTurnStartTime();
+				
 			}
 		}
 		
-		private function resolveMatches(ringsArray:Array):void {
-			for (var i:int = 0; i < ringsArray.length; i++ ) {
-				if (ringsArray[i].getIsMatching()) {
-					var gem:Gem = new Gem("rock");
-					gem.x = ringsArray[i].x;
-					gem.y = ringsArray[i].y;
-					ringsArray[i].replaceActorInGameEngine(ringsArray[i],ringsArray,gem);
-				}
-			}
-		}
 		private function incrementTurnSequence():void {
 			currentTurn++;
 			activeRotatingArray = turnSequence[currentTurn];
@@ -341,15 +361,48 @@
 				for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 					gemsRing_2[i].triggerMatchEvent();
 				}
-				resolveMatches(gemsRing_0);
-				resolveMatches(gemsRing_1);
-				resolveMatches(gemsRing_2);
+				startResolvingMatches();
 				currentTurn = 0;
 				activeRotatingArray = turnSequence[currentTurn];
-				growRingsOut();
+			//	growRingsOut();
 			}
 			planet.setFrame("_"+activeRotatingArray);
 		}
+		
+		private function startResolvingMatches():void {
+			isMatchesResolved = false;
+			//trace("startResolvingMatches");
+			resolveStartedTime = getTimer();
+			
+			activateMatches(gemsRing_0);
+			activateMatches(gemsRing_1);
+			activateMatches(gemsRing_2);
+			isResolvingMatches = true;
+		}
+		
+		private function activateMatches(ringsArray:Array):void {
+			//trace("activateMatches");
+			for (var i:int = 0; i < ringsArray.length; i++ ) {
+				if (ringsArray[i].getIsMatching()) {
+					//do a highlight thing to 
+					ringsArray[i].activateFinalMatchHighlightState();
+				}
+			}
+		}
+		
+		private function resolveMatches(ringsArray:Array):void {
+			//trace("resolveMatches");
+			for (var i:int = 0; i < ringsArray.length; i++ ) {
+				if (ringsArray[i].getIsMatching()) {
+					var gem:Gem = new Gem("rock");
+					gem.x = ringsArray[i].x;
+					gem.y = ringsArray[i].y;
+					ringsArray[i].replaceActorInGameEngine(ringsArray[i],ringsArray,gem);
+				}
+			}
+		}
+		
+		
 		
 		private function removeKeyListeners():void{
 			Main.theStage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);

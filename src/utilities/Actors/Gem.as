@@ -22,16 +22,13 @@ package utilities.Actors{
 			gemType = newType;
 			setUp();
 			if (parent == null) {
-			//	trace("-----------------------------------------parent was null, no idea why")
 				utilities.Engine.Game.gameContainer.addChild(this);
-			//	trace("parent", parent);
 			}
 		}
 		
 		
 		public function setUp():void{
 			addActorToGameEngine();
-			//trace("parent", this.parent);
 			if (gemType == "random"){
 				setRandomGemType();
 			}
@@ -45,7 +42,6 @@ package utilities.Actors{
 			
 		public function setTargetTweenPoint(target:Point):void {
 			targetTweenPoint = target;
-			trace(target);
 		}
 		
 		public function getTargetTweenPoint():Point {
@@ -99,6 +95,15 @@ package utilities.Actors{
 				this.alpha = 0.5;
 			}else {
 				this.alpha = 1;
+			}
+		}
+		
+		public function activateFinalMatchHighlightState():void{
+			//I don't do nuthin yet
+			if (isMatching) {
+				this.scaleX = 2;
+				this.scaleY = 2;
+				this.alpha = .1;
 			}
 		}
 		
