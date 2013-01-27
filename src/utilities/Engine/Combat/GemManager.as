@@ -2,6 +2,7 @@
 	
 
 	import com.greensock.plugins.EndVectorPlugin;
+	import flash.display.Shape;
 	import utilities.Actors.Gem;
 	import utilities.Engine.UIManager;
 	import utilities.Engine.DefaultManager;
@@ -44,12 +45,12 @@
 		private static var gemRingSize_0:int = 4;
 		private static var gemRingSize_1:int = 8;
 		private static var gemRingSize_2:int = 16;
-		public static var originPoint:Point = new Point(300, 300);
+		public static var originPoint:Point = new Point(400, 300);
 		private var isKeysEnabled:Boolean = true;
-		private var planet:Planet;
 		private var innerTweensComplete:Boolean = true;
 		private var middleTweensComplete:Boolean = true;
 		private var outerTweensComplete:Boolean = true;
+		public static var planet:Planet;
 		public function GemManager(){
 			setUp();
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
@@ -147,8 +148,7 @@
 				}
 			}
 			for (var j:int = 0; j < gemArray.length; j++) {
-				
-				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
+			    TweenMax.to(gemArray[j], 0.5, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
 				function resetGems():void{
 					completedTweens++;
 					if (completedTweens == gemArray.length) {
@@ -174,7 +174,7 @@
 			}
 			for (var j:int = 0; j < gemArray.length; j++) {
 				
-				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
+				TweenMax.to(gemArray[j], 0.5, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
 				function resetGems():void{
 					completedTweens++;
 					if (completedTweens == gemArray.length) {
@@ -514,6 +514,7 @@
 			if(currentTime > turnStartedTime + turnLength){
 				incrementTurnSequence();
 				setTurnStartTime();
+				planet.beatHeart();
 			}
 		}
 	}

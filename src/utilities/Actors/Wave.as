@@ -19,8 +19,6 @@ package utilities.Actors
 		
 		public function setUp():void{
 			addActorToGameEngine();
-			
-			
 			if (Math.random()>0.5) {
 				direction = -3;
 				puppet = Main.getClassFromSWF("assets", "waveL");
