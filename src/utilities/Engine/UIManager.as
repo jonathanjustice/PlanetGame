@@ -3,6 +3,7 @@
 	import utilities.Screens.Screen_Default;
 	import utilities.Screens.UIContainer;
 	import utilities.Screens.GameScreens.ScreenStart;
+	import utilities.Screens.GameScreens.HighScoreScreen;
 	import utilities.Engine.DefaultManager;
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
@@ -10,15 +11,16 @@
 		public static var uiContainer:MovieClip = new utilities.Screens.UIContainer();
 		private var padding:int=11;
 		private var screen_LevelUp:MovieClip;
-		
+		private var highScoreScreen:MovieClip;
 		private var screenStart:MovieClip;
-		
+		public var score:int = 1000;
 		public function UIManager(){
 			setUp();
 		}
 		
 		public function setUp():void{
 			Main.theStage.addChild(uiContainer);
+			addHighScoreField();
 			//uiContainer = new UIContainer;
 			//Main.theStage.addChild(uiContainer);
 			//setUpXpBar();
@@ -31,6 +33,15 @@
 		
 		public function openStartScreen():void{
 			screenStart = new ScreenStart();
+			//trace("start");
+		}
+		
+		public function addToScore(amount:int):void {
+			score += amount;
+		}
+		
+		public function addHighScoreField():void{
+			highScoreScreen = new HighScoreScreen();
 			//trace("start");
 		}
 		
@@ -49,7 +60,8 @@
 			
 		}
 		
-		public override function updateLoop():void{
+		public override function updateLoop():void {
+			highScoreScreen.updateTextField(score);
 			/*xpBar.txt_xp.text = xpBarSystem.get_CurrentXP() + " / " + xpBarSystem.get_Next_Levels_Required_XP();//update the text display
 			//xpBar.inner_bar.scaleX = xpBarSystem.get_percent_xp_to_level();//update the xp bar graphic
 			

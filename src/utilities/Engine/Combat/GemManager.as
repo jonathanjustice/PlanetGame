@@ -3,6 +3,7 @@
 
 	import com.greensock.plugins.EndVectorPlugin;
 	import utilities.Actors.Gem;
+	import utilities.Engine.UIManager;
 	import utilities.Engine.DefaultManager;
 	import flash.display.MovieClip;
 	import flash.geom.Point;
@@ -277,6 +278,14 @@
 			for (var z:int = 0; z < gemRingSize_0; z++) {
 				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0,z), "random");
 			}
+			
+			
+			
+			
+			
+			
+			
+			
 			obliterateAllGems();
 			gemsRing_2 = tempRing2;
 			gemsRing_1 = tempRing1;
@@ -286,6 +295,17 @@
 			tweenGemsAfterTurnSequenceComplete(gemsRing_1);
 			tweenGemsAfterTurnSequenceComplete(gemsRing_2);
 			isKeysEnabled = true;
+			
+			//clearing out the temporary arrays
+		/*	while (tempRing0.length) {
+				tempRing0[0].removeActorFromGameEngine(tempRing0[0],tempRing0);
+			}
+			while (tempRing1.length) {
+				tempRing1[0].removeActorFromGameEngine(tempRing1[0],tempRing1);
+			}
+			while (tempRing2.length) {
+				tempRing2[0].removeActorFromGameEngine(tempRing2[0],tempRing2);
+			}*/
 		}
 		
 		private function tweenGemsAfterTurnSequenceComplete(gemArray:Array):void {
