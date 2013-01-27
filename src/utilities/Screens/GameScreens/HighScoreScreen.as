@@ -13,6 +13,7 @@
 	public class HighScoreScreen extends utilities.Screens.Screen_Default{
 		private var myScreen:MovieClip;
 		private var theTextField:TextField = new TextField();
+		private var theTextField2:TextField = new TextField();
 		public function HighScoreScreen(){
 		}
 		
@@ -28,6 +29,7 @@
 			//mouseEnabledHandler();
 			
 			createHighScoreField();
+			createInstructionsField();
 		}
 		
 		public override function addScreenToUIContainer():void{
@@ -37,7 +39,7 @@
 		private function createHighScoreField():void {
 			trace("createHighscoreField");
 			theTextField.type = TextFieldType.DYNAMIC;
-			theTextField.border = true;
+		//	theTextField.border = true;
 			theTextField.x = 10;
 			theTextField.y = 10;
 			theTextField.width = 500;
@@ -51,6 +53,25 @@
             theTextField.autoSize = TextFieldAutoSize.LEFT;
 			this.addChild(theTextField);
 			theTextField.text = "SCORE: 0";
+		}
+		
+		private function createInstructionsField():void {
+			trace("createInstructionsField");
+			theTextField2.type = TextFieldType.DYNAMIC;
+			//theTextField2.border = true;
+			theTextField2.x = 10;
+			theTextField2.y = 575;
+			theTextField2.width = 1000;
+            theTextField2.height = 20;
+			theTextField2.multiline = true;
+			theTextField2.wordWrap = true;
+			theTextField2.selectable = false;
+			//theTextField2.backgroundColor = 0xF5F5DC;
+            //theTextField2.background = true;
+            theTextField2.textColor = 0x000000;
+            theTextField2.autoSize = TextFieldAutoSize.LEFT;
+			this.addChild(theTextField2);
+			theTextField2.text = "Left and Right Arrow keys to rotate the active layer of magma. Match 3 Gems to cause a Tsunami!";
 		}
 		
 		public function updateTextField(score:int):void {
