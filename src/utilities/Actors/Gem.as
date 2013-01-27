@@ -45,6 +45,7 @@ package utilities.Actors{
 			
 		public function setTargetTweenPoint(target:Point):void {
 			targetTweenPoint = target;
+			trace(target);
 		}
 		
 		public function getTargetTweenPoint():Point {

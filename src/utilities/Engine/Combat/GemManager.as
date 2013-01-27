@@ -26,7 +26,7 @@
 	public class GemManager extends utilities.Engine.DefaultManager {
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var turnLength:Number = 100;
+		private var turnLength:Number = 1000;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -41,6 +41,9 @@
 		public static var originPoint:Point = new Point(300, 300);
 		private var isKeysEnabled:Boolean = true;
 		private var planet:Planet;
+		private var innerTweensComplete:Boolean = true;
+		private var middleTweensComplete:Boolean = true;
+		private var outerTweensComplete:Boolean = true;
 		public function GemManager(){
 			setUp();
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
@@ -75,12 +78,10 @@
 		}
 		
 		private function obliterateAllGems():void {
-			//trace("BEFORE obliterateAllGems");
 			while (gemsRing_0.length) {
 				gemsRing_0[0].removeActorFromGameEngine(gemsRing_0[0],gemsRing_0);
 			}
 			while (gemsRing_1.length) {
-				//trace("PARENT:", gemsRing_1[0].parent);
 				gemsRing_1[0].removeActorFromGameEngine(gemsRing_1[0],gemsRing_1);
 			}
 			while (gemsRing_2.length) {
@@ -101,7 +102,8 @@
 			if (ringArray == gemsRing_2) {
 				ringNumber = 2;
 			}
-			var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
+			var angle:Number =  MathFormulas.degreesToRadians(360 * ((i + 0.5) / ringArray.length));
+			trace(angle);
 			positionOfGem.x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
 			positionOfGem.y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 			return positionOfGem;
@@ -110,9 +112,6 @@
 		private function arrangeMyGems(ringArray:Array, ringNumber:int):void {
 			for (var i:int = 0; i < ringArray.length; i++) {
 				var angle:Number =  MathFormulas.degreesToRadians(360 * ((i + 0.5) / ringArray.length));
-				//trace("angle", angle);
-				//trace("ringArray[i]", ringArray[i]);
-				//trace("originPoint",originPoint);
 				ringArray[i].x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
 				ringArray[i].y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 				var gemPoint:Point = new Point();
@@ -146,7 +145,7 @@
 				}
 			}
 			for (var j:int = 0; j < gemArray.length; j++) {
-
+				
 				TweenMax.to(gemArray[j], 1, { x:gemArray[j].getTargetTweenPoint().x, y:gemArray[j].getTargetTweenPoint().y, onComplete:resetGems } );
 				function resetGems():void{
 					completedTweens++;
@@ -235,6 +234,7 @@
 			gem.x = spawnPosition.x;
 			gem.y = spawnPosition.y;
 			gem.setTargetTweenPoint(pointToTweenTo);
+			//trace("pointToTweenTo",pointToTweenTo);
 			ringArray.push(gem);
 			return gem;
 		}
@@ -244,84 +244,106 @@
 			var tempRing2:Array = new Array();
 			var tempRing1:Array = new Array();
 			var tempRing0:Array = new Array();
-			//trace("GROW RINGS OUT");
 			var order:int;
 		
 			//put all the gems in level 1 into level 2
 			for (var i:int = 0; i < gemsRing_1.length; i++ ) {
-				trace(i,gemsRing_1.length);
-				//move all these up to level 2
-				//for every gem, put 2 gems into the array, randomize whice one to put first
+			
 				order = Math.round(Math.random() * 1);
 				var somePoint:Point = new Point(0, 0);
-				trace("define new gems");
 				
 				if (order == 1) {
-					var gem1A:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), somePoint , gemsRing_1[i].getGemType());
-					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), somePoint, "random");
+					//array to be put in, spawn poisition, point to spawn to, result
+					var gem1A:Object = createNewGem(tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, (i*2)) , gemsRing_1[i].getGemType());
+					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2,((i*2)+1)), "random");		trace("-------------------------------------------------------------------------------------------------------------------------------- ", i);
+					//trace(getPositionOfGem(gemsRing_2, gemsRing_2[(i * 2)]));
+					//trace( getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)+1]));
 				}else {
-					var randomGem1B:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), somePoint, "random");
-					var gem1B:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), somePoint , gemsRing_1[i].getGemType());
+					var randomGem1B:Gem = createNewGem(tempRing2, gemsRing_1[i].getPosition(),  getPositionOfGem(gemsRing_2,(i*2)), "random");
+					var gem1B:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i*2)+1)) , gemsRing_1[i].getGemType());
+					trace("-------------------------------------------------------------------------------------------------------------------------------- ", i);
+					//trace(getPositionOfGem(gemsRing_2, gemsRing_2[(i * 2)]));
+					//trace( getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)+1]));
 				}
-				
-				trace("new gems defined");
 			}
-			
 			for (var r:int = 0; r < gemsRing_0.length; r++ ) {
 				order = Math.round(Math.random() * 1);
 				var gemType2:String = gemsRing_0[r].getGemType();
 				var gem2:Gem = new Gem(gemType2);
 				if (order == 1) {
-					var gem2A:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), somePoint , gemsRing_0[r].getGemType());
-					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(), somePoint, "random");
+					
+					var gem2A:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), getPositionOfGem(gemsRing_1,((r*2))) , gemsRing_0[r].getGemType());
+					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,((r*2)+1)), "random");
 				}else {
-					var randomGem2B:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(), somePoint, "random");
-					var gem2B:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), somePoint , gemsRing_0[r].getGemType());
+					var randomGem2B:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,(r*2)), "random");
+					var gem2B:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,((r*2)+1)) , gemsRing_0[r].getGemType());
 				}
 			}
 			for (var z:int = 0; z < gemRingSize_0; z++) {
-				var randomGem3A:Gem = createNewGem( tempRing0, originPoint, somePoint, "random");
+				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0,z), "random");
 			}
-			trace("BEFORE");
-			trace(gemsRing_2);
-			trace(gemsRing_1);
-			trace(gemsRing_0);
 			obliterateAllGems();
-			
-			trace("AFTER");
-			trace(gemsRing_2);
-			trace(gemsRing_1);
-			trace(gemsRing_0);
 			gemsRing_2 = tempRing2;
 			gemsRing_1 = tempRing1;
 			gemsRing_0 = tempRing0;
 			
-		
-			arrangeMyGems(gemsRing_2,2);
-			arrangeMyGems(gemsRing_1, 1);
-			arrangeMyGems(gemsRing_0, 0);
-			trace("done arranging all gems");
+			tweenGemsAfterTurnSequenceComplete(gemsRing_0);
+			tweenGemsAfterTurnSequenceComplete(gemsRing_1);
+			tweenGemsAfterTurnSequenceComplete(gemsRing_2);
 			isKeysEnabled = true;
 		}
 		
+		private function tweenGemsAfterTurnSequenceComplete(gemArray:Array):void {
+				//object to tween, speed, target, result
+			for (var i:int = 0; i < gemArray.length; i++){
+			var completedTweens:int = 0;
+			TweenMax.to(gemArray[i], 1, { x:gemArray[i].getTargetTweenPoint().x, y:gemArray[i].getTargetTweenPoint().y, onComplete:markTurnSequenceComplete } );
+				function markTurnSequenceComplete():void{
+					completedTweens++;
+					if (completedTweens == gemArray.length) {
+						if (gemArray == gemsRing_0) {
+							innerTweensComplete = true;
+						}
+						if (gemArray == gemsRing_1) {
+							middleTweensComplete = true;
+						}
+						if (gemArray == gemsRing_2) {
+							outerTweensComplete = true;
+						}
+						completedTweens = 0;
+						resetTurnSequence();
+					}
+				}
+			}
+		}
+			
+		private function resetTurnSequence():void {
+			if (innerTweensComplete && middleTweensComplete && outerTweensComplete) {
+				isKeysEnabled  = true;
+				//ringsArray.push(ringsArray.shift());
+				setAllMatchesTofalse(gemsRing_0);
+				setAllMatchesTofalse(gemsRing_1);
+				setAllMatchesTofalse(gemsRing_2);
+				checkForMatches();
+			}
+		}
+		
 		private function resolveMatches(ringsArray:Array):void {
-			trace("Before resolveMatches",ringsArray);
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
-					var gem:Gem = new Gem("blue");
+					var gem:Gem = new Gem("rock");
 					gem.x = ringsArray[i].x;
 					gem.y = ringsArray[i].y;
 					ringsArray[i].replaceActorInGameEngine(ringsArray[i],ringsArray,gem);
 				}
 			}
-			trace("After resolveMatches",ringsArray);
 		}
 		private function incrementTurnSequence():void {
 			currentTurn++;
 			activeRotatingArray = turnSequence[currentTurn];
-			trace("incrementTurnSequence: currentTurn:",currentTurn);
+			//trace("incrementTurnSequence: currentTurn:",currentTurn);
 			if (currentTurn > maxTurns) {
-				trace("turn sequence has ended:",currentTurn);
+			//	trace("turn sequence has ended:",currentTurn);
 				for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 					gemsRing_2[i].triggerMatchEvent();
 				}
