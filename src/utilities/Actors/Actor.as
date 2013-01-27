@@ -223,8 +223,6 @@
 			return hasTarget;
 		}
 		
-		//if this actor is tracking a target
-		//force it to no longer track that target
 		public function setTargetToFalse():void{
 			hasTarget = false;
 			target = null;
@@ -242,7 +240,7 @@
 			actor.availableForTargeting=false;
 			var index:int = array.indexOf(actor);
 			array.splice(index, 1);
-			trace("actor", actor, "index",index, "array",array);
+			//trace("actor", actor, "index",index, "array",array);
 			
 			utilities.Engine.Game.gameContainer.removeChild(actor);
 			actor.setTargetToFalse();

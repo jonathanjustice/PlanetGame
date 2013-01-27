@@ -22,16 +22,16 @@ package utilities.Actors{
 			gemType = newType;
 			setUp();
 			if (parent == null) {
-				trace("-----------------------------------------parent was null, no idea why")
+			//	trace("-----------------------------------------parent was null, no idea why")
 				utilities.Engine.Game.gameContainer.addChild(this);
-				trace("parent", parent);
+			//	trace("parent", parent);
 			}
 		}
 		
 		
 		public function setUp():void{
 			addActorToGameEngine();
-			trace("parent", this.parent);
+			//trace("parent", this.parent);
 			if (gemType == "random"){
 				setRandomGemType();
 			}

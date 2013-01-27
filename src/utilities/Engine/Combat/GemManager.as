@@ -75,12 +75,12 @@
 		}
 		
 		private function obliterateAllGems():void {
-			trace("BEFORE obliterateAllGems");
+			//trace("BEFORE obliterateAllGems");
 			while (gemsRing_0.length) {
 				gemsRing_0[0].removeActorFromGameEngine(gemsRing_0[0],gemsRing_0);
 			}
 			while (gemsRing_1.length) {
-				trace("PARENT:", gemsRing_1[0].parent);
+				//trace("PARENT:", gemsRing_1[0].parent);
 				gemsRing_1[0].removeActorFromGameEngine(gemsRing_1[0],gemsRing_1);
 			}
 			while (gemsRing_2.length) {
@@ -241,7 +241,7 @@
 			var tempRing2:Array = new Array();
 			var tempRing1:Array = new Array();
 			var tempRing0:Array = new Array();
-			trace("GROW RINGS OUT");
+			//trace("GROW RINGS OUT");
 			var order:int;
 		
 			//put all the gems in level 1 into level 2
@@ -264,14 +264,14 @@
 				var gemType2:String = gemsRing_0[r].getGemType();
 				var gem2:Gem = new Gem(gemType2);
 				if (order == 1) {
-					trace("GROW RINGSOUT: NEW GEM");
+				//	trace("GROW RINGSOUT: NEW GEM");
 					tempRing1.push(gem2);
-					trace("GROW RINGSOUT: RANDOM GEM");
+					//trace("GROW RINGSOUT: RANDOM GEM");
 					addRandomGemToRing(tempRing1);
 				}else {
-					trace("GROW RINGSOUT: RANDOM GEM");
+				//	trace("GROW RINGSOUT: RANDOM GEM");
 					addRandomGemToRing(tempRing1);
-					trace("GROW RINGSOUT: NEW GEM");
+					//trace("GROW RINGSOUT: NEW GEM");
 					tempRing1.push(gem2);
 				}
 			}
