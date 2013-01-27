@@ -38,7 +38,7 @@
 		private static var gemRingSize_2:int = 16;
 		private static var originPoint:Point = new Point(300, 300);
 		private var isKeysEnabled:Boolean = true;
-		
+		private var planet:Planet;
 		public function GemManager(){
 			setUp();
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
@@ -57,7 +57,7 @@
 		
 		private function createNewRings():void {
 
-			var planet:Planet = new Planet();
+			planet = new Planet();
 			planet.x = originPoint.x;
 			planet.y = originPoint.y;
 
@@ -233,8 +233,10 @@
 			//checkForTurnSequenceOver();
 		}
 		
+
 		private function incrementTurnSequence():void {
 			currentTurn++;
+			
 			activeRotatingArray = turnSequence[currentTurn];
 			trace("incrementTurnSequence: currentTurn:",currentTurn);
 			if (currentTurn > maxTurns) {
@@ -245,6 +247,7 @@
 				currentTurn = 0;
 				activeRotatingArray = turnSequence[currentTurn];
 			}
+			planet.setFrame("_"+activeRotatingArray);
 		}
 		
 		private function checkForTurnSequenceOver():void {

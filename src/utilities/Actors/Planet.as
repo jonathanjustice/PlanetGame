@@ -19,7 +19,7 @@ package utilities.Actors
 			addActorToGameEngine();
 			world = Main.getClassFromSWF("assets", "WORLD");
 			addChild(world);
-			MovieClip(world.getChildByName("base")).gotoAndStop("none");
+			MovieClip(world.getChildByName("base")).gotoAndStop("_0");
 		}
 		
 		public function setFrame(label:String):void{
