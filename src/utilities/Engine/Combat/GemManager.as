@@ -255,15 +255,11 @@
 				if (order == 1) {
 					//array to be put in, spawn poisition, point to spawn to, result
 					var gem1A:Object = createNewGem(tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, (i*2)) , gemsRing_1[i].getGemType());
-					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2,((i*2)+1)), "random");		trace("-------------------------------------------------------------------------------------------------------------------------------- ", i);
-					//trace(getPositionOfGem(gemsRing_2, gemsRing_2[(i * 2)]));
-					//trace( getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)+1]));
+					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2,((i*2)+1)), "random");
 				}else {
 					var randomGem1B:Gem = createNewGem(tempRing2, gemsRing_1[i].getPosition(),  getPositionOfGem(gemsRing_2,(i*2)), "random");
 					var gem1B:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i*2)+1)) , gemsRing_1[i].getGemType());
-					trace("-------------------------------------------------------------------------------------------------------------------------------- ", i);
-					//trace(getPositionOfGem(gemsRing_2, gemsRing_2[(i * 2)]));
-					//trace( getPositionOfGem(gemsRing_2,gemsRing_2[(i*2)+1]));
+					
 				}
 			}
 			for (var r:int = 0; r < gemsRing_0.length; r++ ) {
@@ -271,7 +267,6 @@
 				var gemType2:String = gemsRing_0[r].getGemType();
 				var gem2:Gem = new Gem(gemType2);
 				if (order == 1) {
-					
 					var gem2A:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), getPositionOfGem(gemsRing_1,((r*2))) , gemsRing_0[r].getGemType());
 					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,((r*2)+1)), "random");
 				}else {
@@ -320,7 +315,6 @@
 		private function resetTurnSequence():void {
 			if (innerTweensComplete && middleTweensComplete && outerTweensComplete) {
 				isKeysEnabled  = true;
-				//ringsArray.push(ringsArray.shift());
 				setAllMatchesTofalse(gemsRing_0);
 				setAllMatchesTofalse(gemsRing_1);
 				setAllMatchesTofalse(gemsRing_2);
@@ -379,8 +373,8 @@
 					}
 					isKeysEnabled  = false;
 				}
-				if(e.keyCode == 38){
-				//	createNewRings();
+				if (e.keyCode == 38) {
+					
 				}
 				if(e.keyCode == 39){
 					if (activeRotatingArray == 0) {
@@ -395,7 +389,7 @@
 					isKeysEnabled  = false;
 				}
 				if(e.keyCode == 40){
-					//Key_down_2=true;
+					
 				}
 				if(e.keyCode == 49){
 					activeRotatingArray = 0;
