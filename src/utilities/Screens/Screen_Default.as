@@ -17,7 +17,7 @@
 		public function setUp():void{
 			//myScreen = screen_swf;
 			setScreen();
-			addDynamicBlocker();
+			//addDynamicBlocker();
 			addScreenGraphics();
 			addScreenToUIContainer();
 			addClickHandler();

@@ -32,11 +32,11 @@
 		private var isMatchesResolved:Boolean = true;
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var rockWaitTime:Number = 500;
+		private var rockWaitTime:Number = 1000;
 		private var resolveStartedTime:Number = 0;
-		private var resolveLength:Number = 500;
+		private var resolveLength:Number = 1000;
 		private var isResolvingMatches:Boolean = false;
-		private var turnLength:Number = 500;
+		private var turnLength:Number = 1000;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -266,11 +266,14 @@
 				if (order == 1) {
 					//array to be put in, spawn poisition, point to spawn to, result
 					var gem1A:Object = createNewGem(tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, (i*2)) , gemsRing_1[i].getGemType());
-					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2,((i*2)+1)), "random");
+					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i * 2) + 1)), "random");
+					gem1A.visible = false
+					randomGem1A.visible = false;
 				}else {
 					var randomGem1B:Gem = createNewGem(tempRing2, gemsRing_1[i].getPosition(),  getPositionOfGem(gemsRing_2,(i*2)), "random");
 					var gem1B:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i*2)+1)) , gemsRing_1[i].getGemType());
-					
+					gem1B.visible = false
+					randomGem1B.visible = false;
 				}
 			}
 			for (var r:int = 0; r < gemsRing_0.length; r++ ) {
@@ -279,14 +282,19 @@
 				var gem2:Gem = new Gem(gemType2);
 				if (order == 1) {
 					var gem2A:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), getPositionOfGem(gemsRing_1,((r*2))) , gemsRing_0[r].getGemType());
-					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,((r*2)+1)), "random");
+					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1, ((r * 2) + 1)), "random");
+					gem2A.visible = false
+					randomGem2A.visible = false;
 				}else {
 					var randomGem2B:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,(r*2)), "random");
-					var gem2B:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,((r*2)+1)) , gemsRing_0[r].getGemType());
+					var gem2B:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1, ((r * 2) + 1)) , gemsRing_0[r].getGemType());
+					gem2B.visible = false
+					randomGem2B.visible = false;
 				}
 			}
 			for (var z:int = 0; z < gemRingSize_0; z++) {
-				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0,z), "random");
+				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0, z), "random");
+				randomGem3A.visible = false;
 			}
 			
 //obliterate the first one, then do the first turn sequence
@@ -300,6 +308,9 @@
 			
 			obliterateGemsInArray(gemsRing_0);
 			gemsRing_0 = tempRing0;
+			for each(var gem0:Gem in gemsRing_0) {
+				gem0.visible = true;
+			}
 			tweenGemsAfterTurnSequenceComplete(gemsRing_0);
 			//tweenGemsAfterTurnSequenceComplete(gemsRing_1);
 			//tweenGemsAfterTurnSequenceComplete(gemsRing_2);
@@ -329,12 +340,18 @@
 							innerTweensComplete = true;
 							obliterateGemsInArray(gemsRing_1);
 							gemsRing_1 = tempRing1;
+							for each(var gem1:Gem in gemsRing_1) {
+								gem1.visible = true;
+							}
 							tweenGemsAfterTurnSequenceComplete(gemsRing_1);
 						}
 						if (gemArray == gemsRing_1) {
 							middleTweensComplete = true;
 							obliterateGemsInArray(gemsRing_2);
 							gemsRing_2 = tempRing2;
+							for each(var gem2:Gem in gemsRing_2) {
+								gem2.visible = true;
+							}
 							tweenGemsAfterTurnSequenceComplete(gemsRing_2);
 							
 						}
@@ -360,7 +377,6 @@
 		}
 		
 		private function checkForResolveTimeExpired():void {
-			//trace("checkForResolveTimeExpired");
 			var currentTime:uint = getTimer();
 			if (currentTime > resolveStartedTime + rockWaitTime) {
 				if (!isMatchesResolved) {
@@ -389,11 +405,10 @@
 		}
 		
 		private function incrementTurnSequence():void {
+			planet.beatHeart();
 			currentTurn++;
 			activeRotatingArray = turnSequence[currentTurn];
-			//trace("incrementTurnSequence: currentTurn:",currentTurn);
 			if (currentTurn > maxTurns) {
-			//	trace("turn sequence has ended:",currentTurn);
 				for (var i:int = 0; i < gemsRing_2.length; i++ ) {
 					gemsRing_2[i].triggerMatchEvent();
 				}
@@ -407,7 +422,6 @@
 		
 		private function startResolvingMatches():void {
 			isMatchesResolved = false;
-			//trace("startResolvingMatches");
 			resolveStartedTime = getTimer();
 			
 			activateMatches(gemsRing_0);
@@ -416,7 +430,6 @@
 			isResolvingMatches = true;
 		}		
 		private function activateMatches(ringsArray:Array):void {
-			//trace("activateMatches");
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
 					//do a highlight thing to 
@@ -428,7 +441,6 @@
 		
 		
 		private function resolveMatches(ringsArray:Array):void {
-			//trace("resolveMatches");
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
 					
@@ -536,7 +548,7 @@
 			if(currentTime > turnStartedTime + turnLength){
 				incrementTurnSequence();
 				setTurnStartTime();
-				planet.beatHeart();
+				//planet.beatHeart();
 			}
 		}
 	}

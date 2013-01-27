@@ -47,7 +47,7 @@
 			theTextField.selectable = false;
 			//theTextField.backgroundColor = 0xF5F5DC;
             //theTextField.background = true;
-            theTextField.textColor = 0xFFFFFF;
+            theTextField.textColor = 0x000000;
             theTextField.autoSize = TextFieldAutoSize.LEFT;
 			this.addChild(theTextField);
 			theTextField.text = "SCORE: 0";
