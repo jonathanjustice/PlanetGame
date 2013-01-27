@@ -26,14 +26,17 @@
 	import utilities.Audio.*;
 	
 	public class GemManager extends utilities.Engine.DefaultManager {
+		private var tempRing2:Array = new Array();
+		private	var tempRing1:Array = new Array();
+		private	var tempRing0:Array = new Array();
 		private var isMatchesResolved:Boolean = true;
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var rockWaitTime:Number = 2500;
+		private var rockWaitTime:Number = 500;
 		private var resolveStartedTime:Number = 0;
-		private var resolveLength:Number = 5000;
+		private var resolveLength:Number = 500;
 		private var isResolvingMatches:Boolean = false;
-		private var turnLength:Number = 3000;
+		private var turnLength:Number = 500;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -83,6 +86,12 @@
 			arrangeMyGems(gemsRing_0,0);
 			arrangeMyGems(gemsRing_1,1);
 			arrangeMyGems(gemsRing_2,2);
+		}
+		
+		private function obliterateGemsInArray(gemArray:Array):void {
+			while (gemArray.length) {
+				gemArray[0].removeActorFromGameEngine(gemArray[0],gemArray);
+			}
 		}
 		
 		private function obliterateAllGems():void {
@@ -242,9 +251,10 @@
 		
 		//move the rings out to the next level
 		private function growRingsOut():void {
-			var tempRing2:Array = new Array();
-			var tempRing1:Array = new Array();
-			var tempRing0:Array = new Array();
+			tempRing0 = [];
+			tempRing1 = [];
+			tempRing2 = [];
+		
 			var order:int;
 		
 			//put all the gems in level 1 into level 2
@@ -279,21 +289,20 @@
 				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0,z), "random");
 			}
 			
+//obliterate the first one, then do the first turn sequence
 			
 			
 			
 			
+			//obliterateAllGems();
+			//gemsRing_2 = tempRing2;
+			//gemsRing_1 = tempRing1;
 			
-			
-			
-			obliterateAllGems();
-			gemsRing_2 = tempRing2;
-			gemsRing_1 = tempRing1;
+			obliterateGemsInArray(gemsRing_0);
 			gemsRing_0 = tempRing0;
-			
 			tweenGemsAfterTurnSequenceComplete(gemsRing_0);
-			tweenGemsAfterTurnSequenceComplete(gemsRing_1);
-			tweenGemsAfterTurnSequenceComplete(gemsRing_2);
+			//tweenGemsAfterTurnSequenceComplete(gemsRing_1);
+			//tweenGemsAfterTurnSequenceComplete(gemsRing_2);
 			isKeysEnabled = true;
 			
 			//clearing out the temporary arrays
@@ -318,9 +327,16 @@
 					if (completedTweens == gemArray.length) {
 						if (gemArray == gemsRing_0) {
 							innerTweensComplete = true;
+							obliterateGemsInArray(gemsRing_1);
+							gemsRing_1 = tempRing1;
+							tweenGemsAfterTurnSequenceComplete(gemsRing_1);
 						}
 						if (gemArray == gemsRing_1) {
 							middleTweensComplete = true;
+							obliterateGemsInArray(gemsRing_2);
+							gemsRing_2 = tempRing2;
+							tweenGemsAfterTurnSequenceComplete(gemsRing_2);
+							
 						}
 						if (gemArray == gemsRing_2) {
 							outerTweensComplete = true;

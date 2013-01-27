@@ -103,7 +103,7 @@ package utilities.Actors{
 			if (isMatching) {
 				this.scaleX = 2;
 				this.scaleY = 2;
-				this.alpha = .1;
+				this.alpha = 0;
 			}
 		}
 		
