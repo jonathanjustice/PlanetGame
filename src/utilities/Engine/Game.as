@@ -1,6 +1,7 @@
 ﻿package utilities.Engine{
 	import flash.events.Event;
 	import flash.display.MovieClip;
+	import utilities.Engine.Combat.SurfaceManager;
 	import utilities.Screens.GameContainer;
 	import utilities.Engine.Builders.LevelBuilder;
 	import utilities.Engine.Builders.LootManager;
@@ -25,6 +26,11 @@
 		public static var levelManager:LevelManager;
 		public static var soundManager:SoundManager;
 		public static var avatar:Avatar;
+		
+		public static var surfaceManager:SurfaceManager;
+		
+		
+		
 		private static var quadTree:QuadTree;
 		private static var gamePaused:Boolean=true;
 		
@@ -108,8 +114,9 @@
 			createBulletManager();
 			createEnemyManager();
 			createCombatManager();
+			createSurfaceManager();
 		//	createLootManager();
-			//createSoundManager();
+			createSoundManager();
 		}
 		
 		private static function createGameManagers():void{
@@ -144,6 +151,10 @@
 			lootManager = new LootManager();
 		}
 		
+		private static function createSurfaceManager():void{
+			surfaceManager = new SurfaceManager();
+		}
+		
 		private static function createSoundManager():void {
 			trace("Game: createSoundManager");
 			soundManager = new SoundManager();
@@ -160,6 +171,7 @@
 			//	updateLootManager();
 				//updateCombatManager();
 				updateUIManager();
+				updateSurfaceManager();
 			}else{
 				//can use this section for when the game is paused but I still need to update UI stuff
 			}
@@ -179,6 +191,10 @@
 		
 		private static function updateLootManager():void{
 			lootManager.updateLoop();
+		}
+		
+		private static function updateSurfaceManager():void{
+			surfaceManager.updateLoop();
 		}
 		
 		//for when you need to communicate things to the UI manager

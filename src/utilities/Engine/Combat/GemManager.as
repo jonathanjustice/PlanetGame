@@ -38,7 +38,7 @@
 		private static var gemRingSize_0:int = 4;
 		private static var gemRingSize_1:int = 8;
 		private static var gemRingSize_2:int = 16;
-		private static var originPoint:Point = new Point(300, 300);
+		public static var originPoint:Point = new Point(300, 300);
 		private var isKeysEnabled:Boolean = true;
 		private var planet:Planet;
 		public function GemManager(){
@@ -47,7 +47,6 @@
 			Main.theStage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			isKeysEnabled = true;
 			turnSequence = [2, 1, 0, 1, 2];
-			var a:SoundManager = new SoundManager();
 			setTurnStartTime();
 			gameStarted = true;
 		}
