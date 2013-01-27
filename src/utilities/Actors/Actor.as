@@ -241,7 +241,9 @@
 		public function removeActorFromGameEngine(actor:MovieClip,array:Array):void{
 			actor.availableForTargeting=false;
 			var index:int = array.indexOf(actor);
-			array.splice(index,1);
+			array.splice(index, 1);
+			trace("actor", actor, "index",index, "array",array);
+			
 			utilities.Engine.Game.gameContainer.removeChild(actor);
 			actor.setTargetToFalse();
 		}

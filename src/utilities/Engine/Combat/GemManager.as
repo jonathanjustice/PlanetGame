@@ -26,7 +26,7 @@
 	public class GemManager extends utilities.Engine.DefaultManager {
 		private var gameStarted:Boolean = false;
 		private var turnStartedTime:Number = 0;
-		private var turnLength:Number = 3000;
+		private var turnLength:Number = 1000;
 		//private var turnLength:Number = 1.5e4;
 		private var maxTurns:int = 4;
 		private var turnSequence:Array = new Array();
@@ -75,10 +75,12 @@
 		}
 		
 		private function obliterateAllGems():void {
+			trace("BEFORE obliterateAllGems");
 			while (gemsRing_0.length) {
 				gemsRing_0[0].removeActorFromGameEngine(gemsRing_0[0],gemsRing_0);
 			}
 			while (gemsRing_1.length) {
+				trace("PARENT:", gemsRing_1[0].parent);
 				gemsRing_1[0].removeActorFromGameEngine(gemsRing_1[0],gemsRing_1);
 			}
 			while (gemsRing_2.length) {
@@ -107,13 +109,15 @@
 		
 		private function arrangeMyGems(ringArray:Array, ringNumber:int):void {
 			for (var i:int = 0; i < ringArray.length; i++) {
-				var angle:Number =  MathFormulas.degreesToRadians(360*((i+0.5)/ringArray.length));
+				var angle:Number =  MathFormulas.degreesToRadians(360 * ((i + 0.5) / ringArray.length));
+				//trace("angle", angle);
+				//trace("ringArray[i]", ringArray[i]);
+				//trace("originPoint",originPoint);
 				ringArray[i].x = Math.cos(angle) * ((41 * ringNumber) + 72)+ originPoint.x;
 				ringArray[i].y = Math.sin(angle)  * ((41 * ringNumber) + 72) + originPoint.y;
 				var gemPoint:Point = new Point();
 				gemPoint.x = ringArray[i].x;
 				gemPoint.y = ringArray[i].y;
-				//ringArray[i].rotation = MathFormulas.getAngle(gemPoint, originPoint);
 			}
 		}
 		
@@ -226,8 +230,78 @@
 			}
 		}
 		
+		/*
+		  Don't move things up to the next array
+		  Just figure out what SHOULD be there and put it there
+		  then you can safely remove the old stuff
+		  check out printout where the array is empty or something after mcdonalds
+		 */
+		
+		private function growRingsOut():void {
+			var tempRing2:Array = new Array();
+			var tempRing1:Array = new Array();
+			var tempRing0:Array = new Array();
+			trace("GROW RINGS OUT");
+			var order:int;
+		
+			//put all the gems in level 1 into level 2
+			for (var i:int = 0; i < gemsRing_1.length; i++ ) {
+				//move all these up to level 2
+				//for every gem, put 2 gems into the array, randomize whice one to put first
+				order = Math.round(Math.random() * 1);
+				var gemType:String = gemsRing_1[i].getGemType();
+				var gem:Gem = new Gem(gemType);
+				if (order == 1) {
+					tempRing2.push(gem);
+					addRandomGemToRing(tempRing2);
+				}else {
+					addRandomGemToRing(tempRing2);
+					tempRing2.push(gem);
+				}
+			}
+			for (var r:int = 0; r < gemsRing_0.length; r++ ) {
+				order = Math.round(Math.random() * 1);
+				var gemType2:String = gemsRing_0[r].getGemType();
+				var gem2:Gem = new Gem(gemType2);
+				if (order == 1) {
+					trace("GROW RINGSOUT: NEW GEM");
+					tempRing1.push(gem2);
+					trace("GROW RINGSOUT: RANDOM GEM");
+					addRandomGemToRing(tempRing1);
+				}else {
+					trace("GROW RINGSOUT: RANDOM GEM");
+					addRandomGemToRing(tempRing1);
+					trace("GROW RINGSOUT: NEW GEM");
+					tempRing1.push(gem2);
+				}
+			}
+			for (var z:int = 0; z < gemRingSize_0; z++) {
+				addRandomGemToRing(tempRing0);
+			}
+			trace("BEFORE");
+			trace(gemsRing_2);
+			trace(gemsRing_1);
+			trace(gemsRing_0);
+			obliterateAllGems();
+			
+			trace("AFTER");
+			trace(gemsRing_2);
+			trace(gemsRing_1);
+			trace(gemsRing_0);
+			gemsRing_2 = tempRing2;
+			gemsRing_1 = tempRing1;
+			gemsRing_0 = tempRing0;
+			
+		
+			arrangeMyGems(gemsRing_2,2);
+			arrangeMyGems(gemsRing_1, 1);
+			arrangeMyGems(gemsRing_0, 0);
+			trace("done arranging all gems");
+			isKeysEnabled = true;
+		}
+		
 		private function resolveMatches(ringsArray:Array):void {
-			trace("Before",ringsArray);
+			trace("Before resolveMatches",ringsArray);
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
 					var gem:Gem = new Gem("blue");
@@ -236,7 +310,7 @@
 					ringsArray[i].replaceActorInGameEngine(ringsArray[i],ringsArray,gem);
 				}
 			}
-			trace("After",ringsArray);
+			trace("After resolveMatches",ringsArray);
 		}
 		private function incrementTurnSequence():void {
 			currentTurn++;
@@ -252,6 +326,7 @@
 				resolveMatches(gemsRing_2);
 				currentTurn = 0;
 				activeRotatingArray = turnSequence[currentTurn];
+				growRingsOut();
 			}
 			planet.setFrame("_"+activeRotatingArray);
 		}
@@ -264,7 +339,7 @@
 		private function keyDownHandler(e:KeyboardEvent):void {
 			if(isKeysEnabled == true){
 				if(e.keyCode == 32){
-					obliterateAllGems();
+				//	obliterateAllGems();
 				}
 				if (e.keyCode == 37) {
 					if (activeRotatingArray == 0) {
@@ -279,7 +354,7 @@
 					isKeysEnabled  = false;
 				}
 				if(e.keyCode == 38){
-					createNewRings();
+				//	createNewRings();
 				}
 				if(e.keyCode == 39){
 					if (activeRotatingArray == 0) {
@@ -342,7 +417,6 @@
 		}
 		
 		private function checkForTurnTimeExpired():void{
-			//get timer from the BulletManager and see if the bullet has been alive too long
 			var currentTime:uint = getTimer();
 			if(currentTime > turnStartedTime + turnLength){
 				incrementTurnSequence();
