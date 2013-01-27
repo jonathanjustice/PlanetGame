@@ -1,11 +1,14 @@
 package utilities.Actors 
 {
+	import flash.display.MovieClip;
 	/**
-	 * ...
+	 * Dick
 	 * @author ...
 	 */
 	public class Planet extends Actor 
 	{
+		
+		private var world:MovieClip;
 		
 		public function Planet() 
 		{
@@ -14,7 +17,13 @@ package utilities.Actors
 		
 		public function setUp():void{
 			addActorToGameEngine();
-			addChild(Main.getClassFromSWF("assets", "WORLD"));
+			world = Main.getClassFromSWF("assets", "WORLD");
+			addChild(world);
+			MovieClip(world.getChildByName("base")).gotoAndStop("none");
+		}
+		
+		public function setFrame(label:String):void{
+			MovieClip(world.getChildByName("base")).gotoAndStop(label);	
 		}
 		
 	}

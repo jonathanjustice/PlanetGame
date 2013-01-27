@@ -8,7 +8,7 @@
     <movie fps="30" />
     <movie width="800" />
     <movie height="600" />
-    <movie version="11" />
+    <movie version="9" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
@@ -84,8 +84,8 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Custom" />
-    <option testMovieCommand="bin\something.html" />
+    <option testMovie="OpenDocument" />
+    <option testMovieCommand="bin/something.html" />
   </options>
   <!-- Plugin storage -->
   <storage />

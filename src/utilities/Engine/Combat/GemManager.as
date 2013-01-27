@@ -20,6 +20,8 @@
 	import utilities.Actors.*;
 	import utilities.Engine.*;
 	import utilities.Mathematics.*;
+	import utilities.Audio.*;
+	
 	public class GemManager extends utilities.Engine.DefaultManager{
 		
 		private var maxTurns:int = 4;
@@ -42,7 +44,11 @@
 			Main.theStage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 			Main.theStage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			isKeysEnabled = true;
+
 			turnSequence = [2, 1, 0, 1, 2];
+
+			var a:SoundManager = new SoundManager();
+
 		}
 		
 		public function setUp():void{
@@ -110,7 +116,7 @@
 				var gemPoint:Point = new Point();
 				gemPoint.x = ringArray[i].x;
 				gemPoint.y = ringArray[i].y;
-				ringArray[i].rotation = MathFormulas.getAngle(gemPoint, originPoint);
+				//ringArray[i].rotation = MathFormulas.getAngle(gemPoint, originPoint);
 			}
 		}
 		
@@ -128,7 +134,7 @@
 		private function rotateArrayLeft(gemArray:Array):void {
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
-
+			SoundManager.stoneSound.playSound(1, 1);
 			for (var i:int = 0; i < gemArray.length; i++) {
 				if (i == 0) {
 					tweenPoint = getPositionOfGem(gemArray, gemArray.length-1);
@@ -154,7 +160,7 @@
 		private function rotateArrayRight(gemArray:Array):void {
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
-		
+			SoundManager.stoneSound.playSound(1, 1);
 			for (var i:int = 0; i < gemArray.length; i++) {
 				if (i == gemArray.length-1) {
 					tweenPoint = getPositionOfGem(gemArray, 0);
