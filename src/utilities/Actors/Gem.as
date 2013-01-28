@@ -26,9 +26,12 @@ package utilities.Actors{
 			}
 		}
 		
-		
 		public function setUp():void{
 			addActorToGameEngine();
+			if (gemType == "rock") {
+				this.scaleX = 2;
+				this.scaleY = 2;
+			}
 			if (gemType == "random"){
 				setRandomGemType();
 			}
@@ -74,6 +77,9 @@ package utilities.Actors{
 				case 5:
 					gemType = "copper";
 					break;
+				case 5:
+					gemType = "rock";
+					break;
 			}
 		}
 		
@@ -92,9 +98,11 @@ package utilities.Actors{
 		
 		private function highlightMatches():void {
 			if (isMatching) {
-				this.alpha = 0.5;
+				this.scaleX = 2;
+				this.scaleY = 2;
 			}else {
-				this.alpha = 1;
+				this.scaleX = 1;
+				this.scaleY = 1;
 			}
 		}
 		
@@ -103,13 +111,13 @@ package utilities.Actors{
 			if (isMatching) {
 				this.scaleX = 2;
 				this.scaleY = 2;
-				this.alpha = 0;
+				//this.alpha = 0;
 			}
 		}
 		
 		public function triggerMatchEvent():void {
 			if (isMatching) {
-				this.alpha = 0;
+				//do some stuff for feedback and such
 			}
 		}
 		

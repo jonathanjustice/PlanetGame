@@ -47,7 +47,7 @@ package utilities.Actors
 			return new Rectangle(x - 8, 0, 16, 2);
 		}
 
-		public function move(planetData:Array) {
+		public function move(planetData:Array):void {
 			x += direction; 
 			while (x > SurfaceManager.CIRCUMFERENCE) {
 				x -= SurfaceManager.CIRCUMFERENCE;

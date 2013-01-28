@@ -45,9 +45,9 @@
 		public static var gemsRing_0:Array=new Array();
 		public static var gemsRing_1:Array=new Array();
 		public static var gemsRing_2:Array=new Array();
-		private static var gemRingSize_0:int = 4;
+		private static var gemRingSize_0:int = 8;
 		private static var gemRingSize_1:int = 8;
-		private static var gemRingSize_2:int = 16;
+		private static var gemRingSize_2:int = 8;
 		public static var originPoint:Point = new Point(400, 300);
 		private var isKeysEnabled:Boolean = true;
 		private var innerTweensComplete:Boolean = true;
@@ -229,12 +229,12 @@
 		private function checkForMatches():void {
 			//for gem in the outer circe, take its index / divide it by 2 and floor it to get the one below
 			for (var i:int = 0; i < gemsRing_2.length; i++ ) {
-				if (gemsRing_2[i].getGemType() == gemsRing_1[~~(i / 2)].getGemType() ) {
-					if (gemsRing_1[~~(i / 2)].getGemType() == gemsRing_0[~~(i / 4)].getGemType()) {
+				if (gemsRing_2[i].getGemType() == gemsRing_1[i].getGemType() ) {
+					if (gemsRing_1[i].getGemType() == gemsRing_0[i].getGemType()) {
 						//return true;
 						gemsRing_2[i].setIsMatching(true);
-						gemsRing_1[~~(i / 2)].setIsMatching(true);
-						gemsRing_0[~~(i / 4)].setIsMatching(true);
+						gemsRing_1[i].setIsMatching(true);
+						gemsRing_0[i].setIsMatching(true);
 					}
 				}
 			}
@@ -259,73 +259,32 @@
 		
 			//put all the gems in level 1 into level 2
 			for (var i:int = 0; i < gemsRing_1.length; i++ ) {
-			
-				order = Math.round(Math.random() * 1);
-				var somePoint:Point = new Point(0, 0);
-				
-				if (order == 1) {
 					//array to be put in, spawn poisition, point to spawn to, result
-					var gem1A:Object = createNewGem(tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, (i*2)) , gemsRing_1[i].getGemType());
-					var randomGem1A:Gem = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i * 2) + 1)), "random");
-					gem1A.visible = false
-					randomGem1A.visible = false;
-				}else {
-					var randomGem1B:Gem = createNewGem(tempRing2, gemsRing_1[i].getPosition(),  getPositionOfGem(gemsRing_2,(i*2)), "random");
-					var gem1B:Object = createNewGem( tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, ((i*2)+1)) , gemsRing_1[i].getGemType());
-					gem1B.visible = false
-					randomGem1B.visible = false;
-				}
+					var gemA:Object = createNewGem(tempRing2, gemsRing_1[i].getPosition(), getPositionOfGem(gemsRing_2, (i)) , gemsRing_1[i].getGemType());
 			}
 			for (var r:int = 0; r < gemsRing_0.length; r++ ) {
-				order = Math.round(Math.random() * 1);
-				var gemType2:String = gemsRing_0[r].getGemType();
-				var gem2:Gem = new Gem(gemType2);
-				if (order == 1) {
-					var gem2A:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), getPositionOfGem(gemsRing_1,((r*2))) , gemsRing_0[r].getGemType());
-					var randomGem2A:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1, ((r * 2) + 1)), "random");
-					gem2A.visible = false
-					randomGem2A.visible = false;
-				}else {
-					var randomGem2B:Gem = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1,(r*2)), "random");
-					var gem2B:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(),  getPositionOfGem(gemsRing_1, ((r * 2) + 1)) , gemsRing_0[r].getGemType());
-					gem2B.visible = false
-					randomGem2B.visible = false;
-				}
+					var gemB:Object = createNewGem( tempRing1, gemsRing_0[r].getPosition(), getPositionOfGem(gemsRing_1,((r))) , gemsRing_0[r].getGemType());
 			}
 			for (var z:int = 0; z < gemRingSize_0; z++) {
-				var randomGem3A:Gem = createNewGem( tempRing0, originPoint,  getPositionOfGem(gemsRing_0, z), "random");
-				randomGem3A.visible = false;
+				var gemC:Gem = createNewGem(tempRing0, originPoint,  getPositionOfGem(gemsRing_0, z), "random");
 			}
-			
-//obliterate the first one, then do the first turn sequence
-			
-			
-			
-			
-			//obliterateAllGems();
-			//gemsRing_2 = tempRing2;
-			//gemsRing_1 = tempRing1;
-			
-			obliterateGemsInArray(gemsRing_0);
-			gemsRing_0 = tempRing0;
+	
 			for each(var gem0:Gem in gemsRing_0) {
 				gem0.visible = true;
 			}
+			obliterateGemsInArray(gemsRing_0);
+			gemsRing_0 = tempRing0;
 			tweenGemsAfterTurnSequenceComplete(gemsRing_0);
-			//tweenGemsAfterTurnSequenceComplete(gemsRing_1);
-			//tweenGemsAfterTurnSequenceComplete(gemsRing_2);
-			isKeysEnabled = true;
 			
-			//clearing out the temporary arrays
-		/*	while (tempRing0.length) {
-				tempRing0[0].removeActorFromGameEngine(tempRing0[0],tempRing0);
-			}
-			while (tempRing1.length) {
-				tempRing1[0].removeActorFromGameEngine(tempRing1[0],tempRing1);
-			}
-			while (tempRing2.length) {
-				tempRing2[0].removeActorFromGameEngine(tempRing2[0],tempRing2);
-			}*/
+			obliterateGemsInArray(gemsRing_1);
+			gemsRing_1 = tempRing1;
+			tweenGemsAfterTurnSequenceComplete(gemsRing_1);
+			
+			obliterateGemsInArray(gemsRing_2);
+			gemsRing_2 = tempRing2;
+			tweenGemsAfterTurnSequenceComplete(gemsRing_2);
+			
+			isKeysEnabled = true;
 		}
 		
 		private function tweenGemsAfterTurnSequenceComplete(gemArray:Array):void {
@@ -338,22 +297,9 @@
 					if (completedTweens == gemArray.length) {
 						if (gemArray == gemsRing_0) {
 							innerTweensComplete = true;
-							obliterateGemsInArray(gemsRing_1);
-							gemsRing_1 = tempRing1;
-							for each(var gem1:Gem in gemsRing_1) {
-								gem1.visible = true;
-							}
-							tweenGemsAfterTurnSequenceComplete(gemsRing_1);
 						}
 						if (gemArray == gemsRing_1) {
 							middleTweensComplete = true;
-							obliterateGemsInArray(gemsRing_2);
-							gemsRing_2 = tempRing2;
-							for each(var gem2:Gem in gemsRing_2) {
-								gem2.visible = true;
-							}
-							tweenGemsAfterTurnSequenceComplete(gemsRing_2);
-							
 						}
 						if (gemArray == gemsRing_2) {
 							outerTweensComplete = true;
@@ -444,8 +390,32 @@
 			for (var i:int = 0; i < ringsArray.length; i++ ) {
 				if (ringsArray[i].getIsMatching()) {
 					
+					//create surface event based on the type of match
 					if (ringsArray == gemsRing_2) {
-						SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+						switch(ringsArray[i].getGemType()) {
+							case "blue":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "green":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "gold":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "purple":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "copper":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "silver":
+								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								break;
+							case "rock":
+								//do nothing. rock is worthless
+								break;
+						}
+						
 					}
 					
 					var gem:Gem = new Gem("rock");

@@ -38,7 +38,7 @@
 			
 		}
 		
-		public function addManboat(manboat:Manboat) {
+		public function addManboat(manboat:Manboat):void {
 			menboats.push(manboat);
 		}
 		

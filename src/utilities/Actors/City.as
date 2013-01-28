@@ -34,7 +34,7 @@ package utilities.Actors
 			return new Rectangle(x - 8, 0, 16, 2);
 		}
 
-		public function move() {
+		public function move():void {
 			
 			if (puppet) {
 
