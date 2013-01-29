@@ -1,6 +1,7 @@
 ﻿package utilities.Engine{
 	import utilities.Screens.xpBarSystem;
 	import utilities.Screens.Screen_Default;
+	import utilities.Screens.DefaultTextField;
 	import utilities.Screens.UIContainer;
 	import utilities.Screens.GameScreens.ScreenStart;
 	import utilities.Screens.GameScreens.HighScoreScreen;
@@ -13,6 +14,7 @@
 		private var screen_LevelUp:MovieClip;
 		private var highScoreScreen:MovieClip;
 		private var screenStart:MovieClip;
+		private var defaultTextField:MovieClip;
 		public static var score:int = 0;
 		public function UIManager(){
 			setUp();
@@ -42,6 +44,7 @@
 		
 		public function addHighScoreField():void{
 			highScoreScreen = new HighScoreScreen();
+			defaultTextField = new DefaultTextField()
 			//trace("start");
 		}
 		
