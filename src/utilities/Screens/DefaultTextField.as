@@ -10,9 +10,24 @@ package utilities.Screens {
 
 	public class DefaultTextField extends MovieClip {
 		private var textField:TextField = new TextField();
-		public function DefaultTextField(x:int=25,y:int=25,textCopy:String="Butts Butts Butts Butts",font:String='Verdana',colorHexCode:String="0xff9900",fontSize:int=16,boldness:Boolean=true,italics:Boolean=true) {
+		public function DefaultTextField(
+				x:int = 25, 
+				y:int = 25, 
+				textCopy:String = "Butts Butts Butts Butts", 
+				url:String = "http://www.google.com", 
+				urlTargetWindow:String="_blank",
+				font:String = 'Verdana', 
+				colorHexCode:String = "0xff9900", 
+				fontSize:int = 16, boldness:Boolean = true, 
+				italics:Boolean = true, 
+				underline:Boolean = false,
+				indent:Object = null, 
+				leading:Object = null) 
+			{
 			
-			var textFormat:TextFormat=new TextFormat();
+			var textFormat:TextFormat = new TextFormat();
+			textFormat.url = url;
+			textFormat.target = urlTargetWindow;
 			textFormat.font=font;
 			textFormat.color=colorHexCode;
 			textFormat.size=fontSize;
@@ -35,8 +50,20 @@ package utilities.Screens {
 		}
 		
 		//ONLY USE WEBSAFE FONTS
-		public function setNewTextFormat(font:String='Verdana',colorHexCode:String="0xff9236",fontSize:int=24,boldness:Boolean=true,italics:Boolean=true):void{
-			var textFormat:TextFormat=new TextFormat();
+		public function setNewTextFormat(
+				url:String = "", 
+				urlTargetWindow:String="_blank",
+				font:String = 'Verdana',
+				colorHexCode:String = "0xff9236",
+				fontSize:int = 24,
+				boldness:Boolean = true,
+				italics:Boolean = true,
+				indent:Object = null, 
+				leading:Object = null):void
+			{
+			var textFormat:TextFormat = new TextFormat();
+			textFormat.url = url;
+			textFormat.target = urlTargetWindow;
 			textFormat.font=font;
 			textFormat.color=colorHexCode;
 			textFormat.size=fontSize;
