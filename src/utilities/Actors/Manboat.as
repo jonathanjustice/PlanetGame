@@ -42,7 +42,7 @@ package utilities.Actors
 			}
 			
 			addChild(puppet);
-			direction = (Math.random() > 0.5)? -4:4;
+			direction = (Math.random() > 0.5)? -5:5;
 			direction_countdown = Math.random() * (DIRECTION_COUNTDOWN_MAX - DIRECTION_COUNTDOWN_MIN) + DIRECTION_COUNTDOWN_MIN;
 		}
 		
@@ -111,23 +111,17 @@ package utilities.Actors
 			
 		}
 		
+		//only become a city if there is no city on the current tile && its a land tile
 		private function chanceToBecomeCity():void {
 			if (Probability.generateRandomValue(1, 1000) < 10000 ) {
-				//if the manboat is not in tile that is already taken AND that tile is land tile
 				var node:int = get360FormattedAngle()/ SurfaceManager.nodeDenomenator;
 				if (GemManager.planet.cityNodes[node] == 0) {
-					//trace("Manboat: There was no city here, checking for land!");
 					if (GemManager.planet.data[node] == "land") {
-						
 						turnedIntoCity = true;
-						SurfaceManager.inst.makeCity(x);
-						trace("Manboat: There was no city here, I'm a city now!");
-						trace("its a", GemManager.planet.data[node]);
-						trace(GemManager.planet.data);
+						SurfaceManager.inst.makeCity(node);
 					}
 				}
 			}
-			//	trace(GemManager.planet.cityNodes);
 		}
 		
 		public function getTurnedIntoCity():Boolean {

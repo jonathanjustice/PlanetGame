@@ -38,27 +38,28 @@
 			
 		}
 		
+		//randomly pick between the available tiles, spawn a city on that tile, then remove the tile from the available tiles 
 		private function createStartingCities():void {
 			var i:int = 0;
 			while(i<3){
-				
-				//var angle:Number = 360 * ((Math.random() * CIRCUMFERENCE) / SurfaceManager.CIRCUMFERENCE);
-				var node:int = Probability.generateRandomValue(0, 15)
-				//if there is not already a city in that tile
-				if (GemManager.planet.cityNodes[node] === 0) {
-					if(GemManager.planet.data[node] === "land") {
-						var city:City = new City();
-						city.x = (node * nodeDenomenator) - 11.25;
-					//	city.x = Math.random() * CIRCUMFERENCE;
-						city.move();
-						cities.push(city);
-						trace("node:", node,"it was land");
-						GemManager.planet.cityNodes[node] = 1;
-						i++;
-					}
+				var randNumber:int = Probability.generateRandomValue(0, GemManager.planet.initialTilesAvailableForCities.length-1);
+				var spawnNode:int = GemManager.planet.initialTilesAvailableForCities[randNumber];
+				if (GemManager.planet.cityNodes[spawnNode] === 0) {
+					makeCity(spawnNode);
+					GemManager.planet.initialTilesAvailableForCities.splice(spawnNode, 1);
+					i++;
 				}
-					trace(GemManager.planet.cityNodes);
 			}
+			trace("city nodes",GemManager.planet.cityNodes);
+		}
+		
+		public function makeCity(spawnNode:int):void {
+			var centerScoot:Number = (1/32)* CIRCUMFERENCE;
+			var city:City = new City();
+			city.x = ( (spawnNode + 1) /16) * CIRCUMFERENCE - centerScoot;
+			city.move();
+			cities.push(city);
+			GemManager.planet.cityNodes[spawnNode] = 1;
 		}
 		
 		public function makeLava(xLoc:Number):void {
@@ -69,21 +70,9 @@
 			lavas.push(lava);
 		}
 		
-		public function makeCity(xLoc:Number):void {
-			
-			var city:City = new City();
-			city.x = xLoc;
-			city.move();
-			cities.push(city);
-			var i:int = city.get360FormattedAngle()/nodeDenomenator;
-			trace("node:", i);
-			GemManager.planet.cityNodes[i] = 1;
-		}
-		
 		public function addManboat(manboat:Manboat):void {
 			menboats.push(manboat);
 		}
-		
 		
 		public function makeWaves(angle:Number):void {
 			
@@ -104,14 +93,13 @@
 		}
 		
 		public function makeVolcano(angle:Number):void {
-			
-			
 			var volcano:Volcano = new Volcano(false);
 			volcano.x = (angle / 360) * CIRCUMFERENCE;
-			
 			volcanos.push(volcano);
 		}
 		
+		
+		//CLEAN THIS UP JON- ITS FUCKING HARD TO READ & INEFFICIENT!
 		public override function updateLoop():void {
 			var angle:Number;
 			var radians:Number;
@@ -172,8 +160,6 @@
 					earthquake.removeActorFromGameEngine(earthquake,earthquakes);
 				}
 			}
-			
-			
 			
 			for each (var volcano:Volcano in volcanos) {
 				volcano.move();

@@ -16,13 +16,14 @@ package utilities.Actors
 		private var heart:MovieClip;
 		public var data:Array;
 		public var cityNodes:Array;
+		public var initialTilesAvailableForCities:Array;
 		public function Planet() 
 		{
 			setUp();
 		}
 		
 		public function setUp():void {
-			
+			initialTilesAvailableForCities = new Array();
 			addActorToGameEngine();
 			world = Main.getClassFromSWF("assets", "WORLD");
 			addChild(world);
@@ -42,29 +43,43 @@ package utilities.Actors
 			var frame:int;
 			data = new Array();
 			var numLandTiles:int = 0;
-			while (numLandTiles < 3) {
+			while (numLandTiles < 4) {
 				trace("genWorld")
 				for (i = 0; i < 16; i++ ) {
 					frame = int(Math.random() * 2 + 1);
 					trace("frame:",frame)
 					MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(1);
+					/*
+					if (i < 3) {
+						frame = 1;
+						numLandTiles++;
+						MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(1);
+						initialTilesAvailableForCities.push(i);
+					}else {
+						frame = 2;
+						MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(2);
+					}
+					*/
 					
 					if (frame == 1) {
 						data[i] = "land";
-							numLandTiles++;
+						numLandTiles++;
 						MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(1);
+						initialTilesAvailableForCities.push(i);
 					}else if(frame == 2){
 						data[i] = "water";
 						MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(2);
 					}
+					
 				}
 				//if there are not enough land tiles, run the simulation again
 				if (numLandTiles < 3) {
 					numLandTiles = 0;
 				}
-				trace("data:",data);
+				//trace("data:",data);
 			}
 			//trace("data:",data);
+			trace("available for tiles:",initialTilesAvailableForCities);
 		}
 		
 		public function beatHeart():void {

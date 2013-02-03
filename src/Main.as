@@ -126,16 +126,16 @@
 
 
 /*
-
+	----TASKS
 EarthQuakes(GREEN):
 spawn earthquake - DONE
 If on land: If there's a volcano, destroys the volcano. - DONE
-If on water: sinks land and turns it into water. People become boats and pick a random direction, cities get destroyed. 
+If on land: sinks land and turns it into water. People become boats and pick a random direction, cities get destroyed. 
 On water: Tsunamis. They travel through water and destroy boats, and travel through one land space. upon touching the 2nd land space they get destroyed.
 
 Volcano (PURPLE):
 Spawn Volcano - DONE
-On land: creates volcano. Volcanos sit there and lava flows out. 
+On land: creates volcano. Volcanos sit there and lava flows out. - DONE
 If people touch volcanos, they die. - DONE
 if a tsunami touches a volcano, both get destroyed. - DONE
 On water: creates land. boats turn into people.
@@ -144,10 +144,24 @@ Wind (BLUE):
 Fuck, I dunno. Let's see how those two play.
 
 People:
-on each tick, if Math.rand() < 0.001 and there's no city on that tile, turn into one.  - DONE
+on each tick, if Math.rand() < 0.001 and there's no city on that tile, turn into one.  - FUCK
 
 Cities:
 	Try making three, lowering the spawn rate by 1/3rd to match.  -DONE
+	
+	
+	
+	
+	---- REMAINING
+EarthQuakes(GREEN):
+spawn earthquake - DONE
+If on land: sinks land and turns it into water. People become boats and pick a random direction, cities get destroyed. 
+On water: Tsunamis. They travel through water and destroy boats, and travel through one land space. upon touching the 2nd land space they get destroyed.
 
+Volcano (PURPLE):
+On water: creates land. boats turn into people.
+
+People:
+on each tick, if Math.rand() < 0.001 and there's no city on that tile, turn into one.  - FUCK
 
 */
