@@ -397,19 +397,19 @@
 								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "green":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "gold":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "purple":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "copper":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "silver":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "rock":
 								//do nothing. rock is worthless

@@ -16,27 +16,14 @@ package utilities.Mathematics{
 			//Stand back I'm about to try Math!
 		}
 		
-		/*public static function convertLocalPositionToGlobal(object):Point{
-			trace("O",object.x,object.y);
-			var globalPoint:Point = object.localToGlobal(new Point(0,0));
-			trace("GP",globalPoint);
-			return globalPoint;
+		  //get the shortest angle between the current angle and a target angle. Very useful for determining which way to rotate. i.e. clocwise or counterclockwise
+		public static function getShortestRotationAngle(from : Number, to : Number) : int {
+			var currentRotation : Number = from;
+			var newCourse : Number = to;
+			var shortestAngle : int;
+			shortestAngle = (180/Math.PI) * Math.atan2((Math.cos(currentRotation * Math.PI/180) * Math.sin(newCourse * Math.PI/180) - Math.sin(currentRotation * Math.PI/180) * Math.cos(newCourse * Math.PI/180)), (Math.sin(currentRotation * Math.PI/180) * Math.sin(newCourse * Math.PI/180) + Math.cos(currentRotation * Math.PI/180) * Math.cos(newCourse * Math.PI/180)));
+			return shortestAngle;
 		}
-		*/
-		/*public static function convertLocalPositionToGlobal(point:Point):Point{
-			trace("O",point.x,point.y);
-			var globalPoint:Point = point.localToGlobal(point);
-			trace("GP",globalPoint);
-			return globalPoint;
-		}
-		
-		public static function convertGlobalPositionToLocal(object):Point{
-			trace("O",object.x,object.y);
-			var globalPoint:Point = object.globalToLocal(new Point(0,0));
-			trace("GP",globalPoint);
-			return globalPoint;
-		}*/
-		
 		//convert an angle to a 360 degree format instead of 0 to 180 or 0 to -180 format
 		public static function convertTo360Angle(angleToNormalize:Number):Number{
 			var convertedAngle:Number=0;

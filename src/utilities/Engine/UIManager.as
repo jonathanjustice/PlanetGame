@@ -1,4 +1,6 @@
 ﻿package utilities.Engine{
+	import flash.utils.Timer;
+	import utilities.Mathematics.Time;
 	import utilities.Screens.xpBarSystem;
 	import utilities.Screens.Screen_Default;
 	import utilities.Screens.DefaultTextField;
@@ -64,6 +66,8 @@
 		}
 		
 		public override function updateLoop():void {
+			var timePlaying:String = "TIME: " + utilities.Mathematics.Time.timeElapsedSinceGameStarted();
+			defaultTextField.updateTextField(timePlaying);
 			highScoreScreen.updateTextField(score);
 			/*xpBar.txt_xp.text = xpBarSystem.get_CurrentXP() + " / " + xpBarSystem.get_Next_Levels_Required_XP();//update the text display
 			//xpBar.inner_bar.scaleX = xpBarSystem.get_percent_xp_to_level();//update the xp bar graphic

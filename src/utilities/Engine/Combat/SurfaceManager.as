@@ -12,6 +12,7 @@
 		public static const CIRCUMFERENCE:Number = 1413.71
 		private var menboats:Array;
 		private var waves:Array;
+		private var volcanos:Array;
 		private var cities:Array;
 		public static var inst:SurfaceManager;
 		public function SurfaceManager(){
@@ -25,7 +26,7 @@
 		
 		private function createMenBoats():void {
 			menboats = new Array();
-
+			volcanos = new Array();
 			waves = new Array();
 			
 			cities = new Array();
@@ -51,9 +52,17 @@
 			wave1.x = (angle / 360) * CIRCUMFERENCE;
 			
 			var wave2:Wave = new Wave(true);
-			wave2.x = (angle / 360) * CIRCUMFERENCE;
-			
 			waves.push(wave1,wave2)
+		}
+		
+		public function makeVolcano(angle:Number):void {
+			
+			trace(angle);
+			
+			var volcano:Volcano = new Volcano(false);
+			volcano.x = (angle / 360) * CIRCUMFERENCE;
+			
+			volcanos.push(volcano);
 		}
 		
 		public override function updateLoop():void {
@@ -62,6 +71,22 @@
 			
 			for each (var manboat:Manboat in menboats) {
 				manboat.move(GemManager.planet.data);
+			}
+			
+			for each (var volcano:Volcano in volcanos) {
+				volcano.move();
+				if (volcano.puppet) {
+					volcano.puppet.x = -volcano.x;
+					volcano.puppet.y = -volcano.y;
+					angle = 360 * (volcano.x / CIRCUMFERENCE);
+					volcano.puppet.rotation = angle+90;
+					radians =  MathFormulas.degreesToRadians(angle);
+					volcano.puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - volcano.x;
+					volcano.puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
+				}
+				if (volcano.decay < 0) {
+					volcano.removeActorFromGameEngine(volcano, volcanos);
+				}
 			}
 			
 			
