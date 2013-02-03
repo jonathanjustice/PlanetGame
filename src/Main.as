@@ -123,3 +123,26 @@
 		}
 	}
 }
+
+
+/*
+
+EarthQuakes(GREEN):
+On land: If there's a volcano, destroys the volcano. If not, sinks land and turns it into water. People become boats and pick a random direction, cities get destroyed. 
+On water: Tsunamis. They travel through water and destroy boats, and travel through one land space. upon touching the 2nd land space they get destroyed.
+
+Volcano (PURPLE):
+On land: creates volcano. Volcanos sit there and lava flows out. If people touch volcanos, they die. if a tsunami touches a volcano, both get destroyed.
+On water: creates land. boats turn into people.
+
+Wind (BLUE):
+Fuck, I dunno. Let's see how those two play.
+
+People:
+on each tick, if Math.rand() < 0.001 and there's no city on that tile, turn into one.  - DONE
+
+Cities:
+	Try making three, lowering the spawn rate by 1/3rd to match.  -DONE
+
+
+*/

@@ -22,13 +22,14 @@ package utilities.Actors
 		public function setUp(left:Boolean):void{
 			addActorToGameEngine();
 			alpha = 0;
-			if (left) {
+		//	puppet = Main.getClassFromSWF("assets", "volcano");
+			/*if (left) {
 				direction = -3;
 				puppet = Main.getClassFromSWF("assets", "waveL");
 			}else{
 				direction = 3;
 				puppet = Main.getClassFromSWF("assets", "wave");
-			}
+			}*/
 			addChild(puppet);
 		}
 		

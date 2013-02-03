@@ -14,6 +14,7 @@
 		private var waves:Array;
 		private var volcanos:Array;
 		private var cities:Array;
+		public static var nodeDenomenator:Number = 360/16;
 		public static var inst:SurfaceManager;
 		public function SurfaceManager(){
 			setUp();
@@ -22,21 +23,49 @@
 		
 		public function setUp():void{
 			createMenBoats();
+			createStartingCities();
 		}
 		
 		private function createMenBoats():void {
 			menboats = new Array();
 			volcanos = new Array();
 			waves = new Array();
-			
 			cities = new Array();
-			for (var i:int = 0; i < 1; i++ ) {
-				var city:City = new City();
-				city.x = Math.random() * CIRCUMFERENCE;
-				city.move();
-				cities.push(city);
-			}
 			
+		}
+		
+		private function createStartingCities():void {
+			var i:int = 0;
+			while(i<3){
+				
+				//var angle:Number = 360 * ((Math.random() * CIRCUMFERENCE) / SurfaceManager.CIRCUMFERENCE);
+				var node:int = Probability.generateRandomValue(0, 15)
+				//if there is not already a city in that tile
+				if (GemManager.planet.cityNodes[node] === 0) {
+					if(GemManager.planet.data[node] === "land") {
+						var city:City = new City();
+						city.x = (node * nodeDenomenator) - 11.25;
+					//	city.x = Math.random() * CIRCUMFERENCE;
+						city.move();
+						cities.push(city);
+						trace("node:", node,"it was land");
+						GemManager.planet.cityNodes[node] = 1;
+						i++;
+					}
+				}
+					trace(GemManager.planet.cityNodes);
+			}
+		}
+		
+		public function makeCity(xLoc:Number):void {
+			
+			var city:City = new City();
+			city.x = xLoc;
+			city.move();
+			cities.push(city);
+			var i:int = city.get360FormattedAngle()/nodeDenomenator;
+			trace("node:", i);
+			GemManager.planet.cityNodes[i] = 1;
 		}
 		
 		public function addManboat(manboat:Manboat):void {
@@ -46,8 +75,6 @@
 		
 		public function makeWaves(angle:Number):void {
 			
-			trace(angle);
-			
 			var wave1:Wave = new Wave(false);
 			wave1.x = (angle / 360) * CIRCUMFERENCE;
 			
@@ -55,9 +82,10 @@
 			waves.push(wave1,wave2)
 		}
 		
+	
+		
 		public function makeVolcano(angle:Number):void {
 			
-			trace(angle);
 			
 			var volcano:Volcano = new Volcano(false);
 			volcano.x = (angle / 360) * CIRCUMFERENCE;
@@ -71,6 +99,10 @@
 			
 			for each (var manboat:Manboat in menboats) {
 				manboat.move(GemManager.planet.data);
+				
+				if (manboat.getTurnedIntoCity()) {
+					manboat.removeActorFromGameEngine(manboat, menboats);
+				}
 			}
 			
 			for each (var volcano:Volcano in volcanos) {

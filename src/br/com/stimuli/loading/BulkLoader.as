@@ -1365,7 +1365,7 @@ bulkLoader.start(3)
         *   @return The content retrived from that url casted to a MovieClip object. Returns null if the cast fails.
         */
         public function getMovieClip(key : String, clearMemory : Boolean = false) : MovieClip{
-			trace("getmovieclip");
+			//trace("getmovieclip");
             return MovieClip(_getContentAsType(key, MovieClip, clearMemory));
         }
 

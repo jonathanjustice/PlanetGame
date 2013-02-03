@@ -4,6 +4,7 @@ package utilities.Actors
 	import flash.geom.*;
 	import utilities.Engine.Combat.*;
 	import utilities.Mathematics.MathFormulas;
+	import utilities.Mathematics.Probability;
 	
 	/**
 	 * Dick
@@ -11,16 +12,18 @@ package utilities.Actors
 	 */
 	public class Manboat extends Actor 
 	{
-		private static const DIRECTION_COUNTDOWN_MAX:int = 180;
-		private static const DIRECTION_COUNTDOWN_MIN:int = 60;
+		private static const DIRECTION_COUNTDOWN_MAX:int = 60;
+		private static const DIRECTION_COUNTDOWN_MIN:int = 20;
 		private static const NON_DIRECTION_MULTIPLIER:Number = 3;
 		
+		private var turnedIntoCity:Boolean = false;
 		public var puppet:MovieClip;
 		private var direction:int;
 		private var direction_countdown:int;
 		
 		private var ladyMan:Boolean;
 		private var boatmode:Boolean;
+		private var formattedAngle:Number;
 		
 		public function Manboat() 
 		{
@@ -39,7 +42,7 @@ package utilities.Actors
 			}
 			
 			addChild(puppet);
-			direction = (Math.random() > 0.5)? -1:1;
+			direction = (Math.random() > 0.5)? -4:4;
 			direction_countdown = Math.random() * (DIRECTION_COUNTDOWN_MAX - DIRECTION_COUNTDOWN_MIN) + DIRECTION_COUNTDOWN_MIN;
 		}
 		
@@ -77,7 +80,7 @@ package utilities.Actors
 					index = 0;
 				}
 				if (planetData[index] == "water" && !boatmode) {
-					trace("be a boat")
+					
 					boatmode = true;
 					removeChild(puppet)
 					puppet = Main.getClassFromSWF("assets", "boat");
@@ -85,7 +88,7 @@ package utilities.Actors
 					
 				}
 				if (planetData[index] == "land" && boatmode) {
-					trace("be a pepole")
+					
 					boatmode = false;
 					removeChild(puppet)
 					if (ladyMan) {
@@ -96,6 +99,7 @@ package utilities.Actors
 					addChild(puppet);
 				}
 				
+				chanceToBecomeCity();
 				//puppet.x = -x;
 			//	puppet.y = -y;
 				var angle:Number = 360 * (x / SurfaceManager.CIRCUMFERENCE);
@@ -103,10 +107,36 @@ package utilities.Actors
 				var radians:Number =  MathFormulas.degreesToRadians(angle);
 				puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - x;
 				puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
-
-				
 			}
 			
+		}
+		
+		private function chanceToBecomeCity():void {
+			if (Probability.generateRandomValue(1, 1000) < 10000 ) {
+				//if the manboat is not in tile that is already taken AND that tile is land tile
+				var node:int = get360FormattedAngle()/ SurfaceManager.nodeDenomenator;
+				if (GemManager.planet.cityNodes[node] == 0) {
+					//trace("Manboat: There was no city here, checking for land!");
+					if (GemManager.planet.data[node] == "land") {
+						
+						turnedIntoCity = true;
+						SurfaceManager.inst.makeCity(x);
+						trace("Manboat: There was no city here, I'm a city now!");
+						trace("its a", GemManager.planet.data[node]);
+						trace(GemManager.planet.data);
+					}
+				}
+			}
+			//	trace(GemManager.planet.cityNodes);
+		}
+		
+		public function getTurnedIntoCity():Boolean {
+			return turnedIntoCity;
+		}
+		
+		public function get360FormattedAngle():Number {
+			var angle:Number = 360 * (x / SurfaceManager.CIRCUMFERENCE);
+			return angle;
 		}
 		
 	}

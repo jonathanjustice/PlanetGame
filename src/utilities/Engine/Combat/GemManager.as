@@ -141,8 +141,6 @@
 			ringArray.push(gem);
 		}
 		
-	
-		
 		private function rotateArrayLeft(gemArray:Array):void {
 			var tweenPoint:Point = new Point();
 			var completedTweens:int = 0;
@@ -394,7 +392,7 @@
 					if (ringsArray == gemsRing_2) {
 						switch(ringsArray[i].getGemType()) {
 							case "blue":
-								SurfaceManager.inst.makeWaves(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "green":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));

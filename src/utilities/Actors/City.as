@@ -11,11 +11,12 @@ package utilities.Actors
 	 */
 	public class City extends Actor 
 	{
-		private static const MANBOAT_COUNTDOWN_MAX:int = 60;
-		private static const MANBOAT_COUNTDOWN_MIN:int = 20;
+		private static const MANBOAT_COUNTDOWN_MAX:int = 180;
+		private static const MANBOAT_COUNTDOWN_MIN:int = 60;
 		
 		public var puppet:MovieClip;
 		public var manboatCounter:int;
+		private var formattedAngle:Number;
 		public function City() 
 		{
 			setUp();
@@ -39,14 +40,17 @@ package utilities.Actors
 			if (puppet) {
 
 				var angle:Number = 360 * (x / SurfaceManager.CIRCUMFERENCE);
+				formattedAngle = angle;
 				puppet.rotation = angle+90;
 				var radians:Number =  MathFormulas.degreesToRadians(angle);
 				puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - x;
 				puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
-
-				
 			}
-			
+		}
+		
+		public function get360FormattedAngle():Number {
+			var angle:Number = 360 * (x / SurfaceManager.CIRCUMFERENCE);
+			return angle;
 		}
 		
 		public function tick(manager:SurfaceManager):void {
