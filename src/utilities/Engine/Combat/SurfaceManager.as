@@ -50,14 +50,14 @@
 					i++;
 				}
 			}
-			trace("city nodes",GemManager.planet.cityNodes);
+			//trace("city nodes",GemManager.planet.cityNodes);
 		}
 		
 		public function makeCity(spawnNode:int):void {
 			var centerScoot:Number = (1/32)* CIRCUMFERENCE;
 			var city:City = new City();
 			city.x = ( (spawnNode + 1) /16) * CIRCUMFERENCE - centerScoot;
-			city.move();
+			//city.move(planetData:Array);
 			cities.push(city);
 			GemManager.planet.cityNodes[spawnNode] = 1;
 		}
@@ -84,18 +84,45 @@
 			waves.push(wave1,wave2)
 		}
 		
+		//if its on land, it sinks the land
+		//if its on water, creates a tsunami
 		public function makeEarthquake(angle:Number):void {
-			
-			var earthquake:Earthquake = new Earthquake(false);
-			earthquake.x = (angle / 360) * CIRCUMFERENCE;
+			var node:int = Math.floor(angle / 22.5);
+			if (GemManager.planet.data[node] == "land") {
+				trace("land");
+				var earthquake:Earthquake = new Earthquake(false);
+				earthquake.x = (angle / 360) * CIRCUMFERENCE;
+				earthquakes.push(earthquake);
+				GemManager.planet.changeTileTo(node,"water");
+			}else if (GemManager.planet.data[node] == "water") {
+				trace("land");
+				var earthquake:Earthquake = new Earthquake(false);
+				earthquake.x = (angle / 360) * CIRCUMFERENCE;
+				earthquakes.push(earthquake);
+			}
+		
 			
 			earthquakes.push(earthquake);
 		}
 		
+		//if its on land make a volcano
+		//if its on water, make a land & volcano
 		public function makeVolcano(angle:Number):void {
-			var volcano:Volcano = new Volcano(false);
-			volcano.x = (angle / 360) * CIRCUMFERENCE;
-			volcanos.push(volcano);
+			var node:int = Math.floor(angle / 22.5);
+			trace("make volcano: node:",node);
+			if (GemManager.planet.data[node] == "land") {
+				trace("land");
+				var volcano:Volcano = new Volcano(false);
+				volcano.x = (angle / 360) * CIRCUMFERENCE;
+				volcanos.push(volcano);
+			}else if (GemManager.planet.data[node] == "water") {
+				trace("water");
+				var volcano2:Volcano = new Volcano(false);
+				volcano2.x = (angle / 360) * CIRCUMFERENCE;
+				volcanos.push(volcano2);
+				GemManager.planet.changeTileTo(node,"land");
+			}
+			
 		}
 		
 		
@@ -178,7 +205,7 @@
 				}
 				
 				for each (var wave2:Wave in waves) {
-					if (volcano.getBoundingRect().intersects(wave.getBoundingRect())) {
+					if (volcano.getBoundingRect().intersects(wave2.getBoundingRect())) {
 						volcano.markDeathFlag();
 						wave2.markDeathFlag();
 					}
@@ -234,14 +261,18 @@
 						//add score for each man murdered
 						utilities.Engine.UIManager.addToScore(50);
 					}
-					if (volcano.getDeathFlag()) {
+					if (manboat2.getDeathFlag()) {
 						manboat2.removeActorFromGameEngine(manboat2,menboats);
 					}
 				}
 			}
 			
 			for each (var city:City in cities) {
-					city.tick(this);
+				city.tick(this);
+				city.move(GemManager.planet.data);
+				if (city.getDeathFlag()) {
+					city.removeActorFromGameEngine(city,cities);
+				}
 			}
 		}
 	}

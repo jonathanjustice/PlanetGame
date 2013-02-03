@@ -35,7 +35,7 @@ package utilities.Actors
 			return new Rectangle(x - 8, 0, 16, 2);
 		}
 
-		public function move():void {
+		public function move(planetData:Array):void {
 			
 			if (puppet) {
 
@@ -45,6 +45,17 @@ package utilities.Actors
 				var radians:Number =  MathFormulas.degreesToRadians(angle);
 				puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - x;
 				puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
+				
+				var index:int = int(16 * (x / SurfaceManager.CIRCUMFERENCE));
+				if (index > 16) {
+					index = 16;
+				}
+				if (index < 0) {
+					index = 0;
+				}
+				if (planetData[index] == "water") {
+					markDeathFlag();
+				}
 			}
 		}
 		

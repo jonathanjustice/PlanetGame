@@ -38,6 +38,17 @@ package utilities.Actors
 			cityNodes=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		}
 		
+		public function changeTileTo(i:int,newType:String):void {
+			if (newType == "land") {
+				MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(1);
+				data[i] = "land";
+			}
+			if (newType == "water") {
+				MovieClip(chunkMovieClip.getChildByName("_" + i)).gotoAndStop(2);
+				data[i] = "water";
+			}
+		}
+		
 		private function genWorld():void {
 			var i:int;
 			var frame:int;
@@ -76,10 +87,8 @@ package utilities.Actors
 				if (numLandTiles < 3) {
 					numLandTiles = 0;
 				}
-				//trace("data:",data);
 			}
-			//trace("data:",data);
-			trace("available for tiles:",initialTilesAvailableForCities);
+		//	trace("available for tiles:",initialTilesAvailableForCities);
 		}
 		
 		public function beatHeart():void {
