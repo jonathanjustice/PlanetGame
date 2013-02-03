@@ -14,6 +14,7 @@
 		private var waves:Array;
 		private var volcanos:Array;
 		private var cities:Array;
+		private var lavas:Array;
 		private var earthquakes:Array;
 		public static var nodeDenomenator:Number = 360/16;
 		public static var inst:SurfaceManager;
@@ -32,6 +33,7 @@
 			volcanos = new Array();
 			waves = new Array();
 			cities = new Array();
+			lavas = new Array();
 			earthquakes = new Array();
 			
 		}
@@ -57,6 +59,18 @@
 				}
 					trace(GemManager.planet.cityNodes);
 			}
+		}
+		
+		public function makeLava(xLoc:Number):void {
+			
+			var lava:Lava = new Lava(true);
+			lava.x = xLoc;
+			lava.move();
+			lavas.push(lava);
+			trace(lava);
+			//var i:int = lava.get360FormattedAngle()/nodeDenomenator;
+			//trace("node:", i);
+			//GemManager.planet.cityNodes[i] = 1;
 		}
 		
 		public function makeCity(xLoc:Number):void {
@@ -106,6 +120,23 @@
 			var angle:Number;
 			var radians:Number;
 			
+			for each (var lava:Lava in lavas) {
+				trace("lava loop");
+				lava.move();
+				if (lava.puppet) {
+					lava.puppet.x = -lava.x;
+					lava.puppet.y = -lava.y;
+					angle = 360 * (lava.x / CIRCUMFERENCE);
+					lava.puppet.rotation = angle+90;
+					radians =  MathFormulas.degreesToRadians(angle);
+					lava.puppet.x = Math.cos(radians) * (240 - lava.y) + GemManager.originPoint.x - lava.x;
+					lava.puppet.y = Math.sin(radians) * (240 - lava.y) + GemManager.originPoint.y - lava.y;
+				}
+				if (lava.decay < 0) {
+					lava.removeActorFromGameEngine(lava, lavas);
+				}
+			}
+			
 			for each (var earthquake:Earthquake in earthquakes) {
 				earthquake.move();
 				if (earthquake.puppet) {
@@ -116,6 +147,9 @@
 					radians =  MathFormulas.degreesToRadians(angle);
 					earthquake.puppet.x = Math.cos(radians) * 240 + GemManager.originPoint.x - earthquake.x;
 					earthquake.puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
+				}
+				if (earthquake.decay < 0) {
+					earthquake.removeActorFromGameEngine(earthquake, earthquakes);
 				}
 				for each (var volcano2:Volcano in volcanos) {
 					if (volcano2.getBoundingRect().intersects(earthquake.getBoundingRect())) {
@@ -130,6 +164,14 @@
 				
 				if (manboat.getTurnedIntoCity()) {
 					manboat.removeActorFromGameEngine(manboat, menboats);
+				}
+				
+				for each (var lava2:Lava in lavas) {
+					if (manboat.getBoundingRect().intersects(lava2.getBoundingRect())) {
+						manboat.removeActorFromGameEngine(manboat, menboats);
+						//add score for each man murdered
+						utilities.Engine.UIManager.addToScore(50);
+					}
 				}
 			}
 			

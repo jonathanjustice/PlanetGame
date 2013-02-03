@@ -4,51 +4,54 @@ package utilities.Actors
 	import flash.display.MovieClip;
 	import flash.geom.Rectangle;
 	import utilities.Engine.Combat.SurfaceManager;
+	import utilities.Mathematics.Probability;
 	/**
 	 * Dick
 	 * @author ...
 	 */
-	public class Volcano extends Actor {
+	public class Lava extends Actor {
 		public var decay:int;
 		public var puppet:MovieClip;
-		private var LAVA_DELAY:int = 10;
-		private var lavaCountdown:int = 0;
 		private var direction:int;
+		private var deltaX:Number;
+		private var deltaY:Number;
+		//private var deltaXDecay:Number;
+		private var deltaYDecay:Number = 3;
 		
-		public function Volcano(left:Boolean) 
+		public function Lava(left:Boolean) 
 		{
 			setUp(left);
-			decay = Math.random() * 100 + 25;
+			decay = Math.random() * 50 + 25;
 		}
 		
 		public function setUp(left:Boolean):void {
-			lavaCountdown = LAVA_DELAY;
 			addActorToGameEngine();
+			deltaX = Probability.generateRandomValue(-7, 7)
+			deltaY = Probability.generateRandomValue(8,13)
+			
 			puppet = Main.getClassFromSWF("assets", "volcano");
-			/*if (left) {
-				direction = -3;
-				puppet = Main.getClassFromSWF("assets", "waveL");
-			}else{
-				direction = 3;
-				puppet = Main.getClassFromSWF("assets", "wave");
-			}*/
+			
 			addChild(puppet);
 		}
 		
 		public function getBoundingRect():Rectangle {
 			return new Rectangle(x - 3, 0, 6, 2);
 		}
-		
-		private function createNewLava():void {
-			SurfaceManager.inst.makeLava(x);
-		}
 
 		public function move():void {
-			lavaCountdown--;
-			if (lavaCountdown == 0) {
-				trace("create new lava");
-				lavaCountdown = LAVA_DELAY;
-				createNewLava();
+			x += deltaX;
+			while (x > SurfaceManager.CIRCUMFERENCE) {
+				x -= SurfaceManager.CIRCUMFERENCE;
+			}
+			while (x < 0) {
+				x += SurfaceManager.CIRCUMFERENCE;
+			}
+			y -= deltaY;
+			deltaY -= 1;
+			if (y > 0) {
+				y = 0;
+				deltaY = 0;
+				deltaX = 0;
 			}
 			decay--;
 		}

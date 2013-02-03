@@ -392,19 +392,19 @@
 					if (ringsArray == gemsRing_2) {
 						switch(ringsArray[i].getGemType()) {
 							case "blue":
-								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "green":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "gold":
-								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "purple":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "copper":
-								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "silver":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
