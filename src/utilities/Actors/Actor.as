@@ -58,6 +58,10 @@
 			availableForTargeting = false;//prevent null reference errors
 		}
 		
+		public function getDeathFlag():Boolean{
+			return markedForDeletion;
+		}
+		
 		//determine what needs to be deleted and then delete it
 		public function checkForDeathFlag():void{
 			if(markedForDeletion){

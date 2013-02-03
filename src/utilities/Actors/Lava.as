@@ -54,19 +54,6 @@ package utilities.Actors
 				deltaX = 0;
 			}
 			decay--;
-		}
-		/*public function move():void {
-			x += direction; 
-			while (x > SurfaceManager.CIRCUMFERENCE) {
-				x -= SurfaceManager.CIRCUMFERENCE;
-			}
-			while (x < 0) {
-				x += SurfaceManager.CIRCUMFERENCE;
-			}
-			
-			decay--;
-		}*/
-		
+		}	
 	}
-
 }

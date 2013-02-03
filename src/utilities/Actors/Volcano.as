@@ -46,24 +46,10 @@ package utilities.Actors
 		public function move():void {
 			lavaCountdown--;
 			if (lavaCountdown == 0) {
-				trace("create new lava");
 				lavaCountdown = LAVA_DELAY;
 				createNewLava();
 			}
 			decay--;
 		}
-		/*public function move():void {
-			x += direction; 
-			while (x > SurfaceManager.CIRCUMFERENCE) {
-				x -= SurfaceManager.CIRCUMFERENCE;
-			}
-			while (x < 0) {
-				x += SurfaceManager.CIRCUMFERENCE;
-			}
-			
-			decay--;
-		}*/
-		
 	}
-
 }

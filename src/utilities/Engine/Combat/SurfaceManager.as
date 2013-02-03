@@ -67,10 +67,6 @@
 			lava.x = xLoc;
 			lava.move();
 			lavas.push(lava);
-			trace(lava);
-			//var i:int = lava.get360FormattedAngle()/nodeDenomenator;
-			//trace("node:", i);
-			//GemManager.planet.cityNodes[i] = 1;
 		}
 		
 		public function makeCity(xLoc:Number):void {
@@ -120,8 +116,26 @@
 			var angle:Number;
 			var radians:Number;
 			
+			for each (var manboat:Manboat in menboats) {
+				manboat.move(GemManager.planet.data);
+				
+				if (manboat.getTurnedIntoCity()) {
+					manboat.markDeathFlag();
+				}
+				
+				for each (var lava2:Lava in lavas) {
+					if (manboat.getBoundingRect().intersects(lava2.getBoundingRect())) {
+						manboat.markDeathFlag();
+						//add score for each man murdered
+						utilities.Engine.UIManager.addToScore(50);
+					}
+				}
+				if (manboat.getDeathFlag()) {
+					manboat.removeActorFromGameEngine(manboat,menboats);
+				}
+			}
+			
 			for each (var lava:Lava in lavas) {
-				trace("lava loop");
 				lava.move();
 				if (lava.puppet) {
 					lava.puppet.x = -lava.x;
@@ -133,7 +147,10 @@
 					lava.puppet.y = Math.sin(radians) * (240 - lava.y) + GemManager.originPoint.y - lava.y;
 				}
 				if (lava.decay < 0) {
-					lava.removeActorFromGameEngine(lava, lavas);
+					lava.markDeathFlag();
+				}
+				if (lava.getDeathFlag()) {
+					lava.removeActorFromGameEngine(lava,lavas);
 				}
 			}
 			
@@ -149,31 +166,14 @@
 					earthquake.puppet.y = Math.sin(radians) * 240 + GemManager.originPoint.y;
 				}
 				if (earthquake.decay < 0) {
-					earthquake.removeActorFromGameEngine(earthquake, earthquakes);
+					earthquake.markDeathFlag();
 				}
-				for each (var volcano2:Volcano in volcanos) {
-					if (volcano2.getBoundingRect().intersects(earthquake.getBoundingRect())) {
-						volcano2.removeActorFromGameEngine(volcano2, volcanos);
-						earthquake.removeActorFromGameEngine(earthquake, waves);
-					}
+				if (earthquake.getDeathFlag()) {
+					earthquake.removeActorFromGameEngine(earthquake,earthquakes);
 				}
 			}
 			
-			for each (var manboat:Manboat in menboats) {
-				manboat.move(GemManager.planet.data);
-				
-				if (manboat.getTurnedIntoCity()) {
-					manboat.removeActorFromGameEngine(manboat, menboats);
-				}
-				
-				for each (var lava2:Lava in lavas) {
-					if (manboat.getBoundingRect().intersects(lava2.getBoundingRect())) {
-						manboat.removeActorFromGameEngine(manboat, menboats);
-						//add score for each man murdered
-						utilities.Engine.UIManager.addToScore(50);
-					}
-				}
-			}
+			
 			
 			for each (var volcano:Volcano in volcanos) {
 				volcano.move();
@@ -188,22 +188,40 @@
 				}
 				
 				if (volcano.decay < 0) {
-					volcano.removeActorFromGameEngine(volcano, volcanos);
+					volcano.markDeathFlag();
 				}
 				
 				for each (var wave2:Wave in waves) {
 					if (volcano.getBoundingRect().intersects(wave.getBoundingRect())) {
-						volcano.removeActorFromGameEngine(volcano, volcanos);
-						wave2.removeActorFromGameEngine(wave2, waves);
+						volcano.markDeathFlag();
+						wave2.markDeathFlag();
+					}
+					if (wave2.getDeathFlag()) {
+						wave2.removeActorFromGameEngine(wave2,waves);
 					}
 				}	
 				
 				for each (var manboat3:Manboat in menboats) {
 					if (manboat3.getBoundingRect().intersects(volcano.getBoundingRect())) {
-						manboat3.removeActorFromGameEngine(manboat3, menboats);
+						manboat3.markDeathFlag();
 						//add score for each man murdered
 						utilities.Engine.UIManager.addToScore(50);
 					}
+					if (manboat3.getDeathFlag()) {
+						manboat3.removeActorFromGameEngine(manboat3,menboats);
+					}
+				}
+				for each (var earthquake2:Earthquake in earthquakes) {
+					if (volcano.getBoundingRect().intersects(earthquake2.getBoundingRect())) {
+						volcano.markDeathFlag();
+						earthquake2.markDeathFlag();
+					}
+					if (earthquake2.getDeathFlag()) {
+						earthquake2.removeActorFromGameEngine(earthquake2,earthquakes);
+					}
+				}
+				if (volcano.getDeathFlag()) {
+					volcano.removeActorFromGameEngine(volcano,volcanos);
 				}
 			}
 			
@@ -221,14 +239,17 @@
 				}
 				
 				if (wave.decay < 0) {
-					wave.removeActorFromGameEngine(wave, waves);
+					wave.markDeathFlag();
 				}
 				
 				for each (var manboat2:Manboat in menboats) {
 					if (manboat2.getBoundingRect().intersects(wave.getBoundingRect())) {
-						manboat2.removeActorFromGameEngine(manboat2, menboats);
+						manboat2.markDeathFlag();
 						//add score for each man murdered
 						utilities.Engine.UIManager.addToScore(50);
+					}
+					if (volcano.getDeathFlag()) {
+						manboat2.removeActorFromGameEngine(manboat2,menboats);
 					}
 				}
 			}
