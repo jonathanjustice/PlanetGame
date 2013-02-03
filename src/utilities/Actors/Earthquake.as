@@ -8,12 +8,12 @@ package utilities.Actors
 	 * Dick
 	 * @author ...
 	 */
-	public class Volcano extends Actor {
+	public class Earthquake extends Actor {
 		public var decay:int;
 		public var puppet:MovieClip;
 		private var direction:int;
 		
-		public function Volcano(left:Boolean) 
+		public function Earthquake(left:Boolean) 
 		{
 			setUp(left);
 			decay = Math.random() * 10250 + 10250;
@@ -21,15 +21,9 @@ package utilities.Actors
 		
 		public function setUp(left:Boolean):void{
 			addActorToGameEngine();
-			alpha = 0;
-			puppet = Main.getClassFromSWF("assets", "volcano");
-			/*if (left) {
-				direction = -3;
-				puppet = Main.getClassFromSWF("assets", "waveL");
-			}else{
-				direction = 3;
-				puppet = Main.getClassFromSWF("assets", "wave");
-			}*/
+			//alpha = 0;
+			puppet = Main.getClassFromSWF("assets", "earthquake");
+			
 			addChild(puppet);
 		}
 		
@@ -38,9 +32,7 @@ package utilities.Actors
 		}
 
 		public function move():void {
-			if (alpha < 1) {
-				alpha += .005;
-			}
+			
 			decay--;
 		}
 		/*public function move():void {

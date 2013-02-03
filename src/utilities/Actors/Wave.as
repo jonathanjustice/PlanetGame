@@ -16,7 +16,7 @@ package utilities.Actors
 		public function Wave(left:Boolean) 
 		{
 			setUp(left);
-			decay = Math.random() * 60 + 60;
+			decay = Math.random() * 10060 + 10060;
 		}
 		
 		public function setUp(left:Boolean):void{

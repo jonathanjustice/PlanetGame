@@ -45,9 +45,9 @@
 		public static var gemsRing_0:Array=new Array();
 		public static var gemsRing_1:Array=new Array();
 		public static var gemsRing_2:Array=new Array();
-		private static var gemRingSize_0:int = 8;
-		private static var gemRingSize_1:int = 8;
-		private static var gemRingSize_2:int = 8;
+		private static var gemRingSize_0:int = 16;
+		private static var gemRingSize_1:int = 16;
+		private static var gemRingSize_2:int = 16;
 		public static var originPoint:Point = new Point(400, 300);
 		private var isKeysEnabled:Boolean = true;
 		private var innerTweensComplete:Boolean = true;
@@ -392,19 +392,19 @@
 					if (ringsArray == gemsRing_2) {
 						switch(ringsArray[i].getGemType()) {
 							case "blue":
-								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "green":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "gold":
-								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "purple":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "copper":
-								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
+								SurfaceManager.inst.makeEarthquake(360 * ((i + 0.5) / gemsRing_2.length));
 								break;
 							case "silver":
 								SurfaceManager.inst.makeVolcano(360 * ((i + 0.5) / gemsRing_2.length));
